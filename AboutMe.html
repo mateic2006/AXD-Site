@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Me - Isabella Rose</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#C292FC",
+              secondary: "#F0E6FE",
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <style>
+      :where([class^="ri-"])::before {
+        content: "\f3c2";
+      }
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .skill-chart {
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body class="bg-white min-h-screen">
+    <nav class="fixed w-full bg-white/80 backdrop-blur-md z-50 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="#" class="h-16 flex items-center">
+            <img
+              src="https://static.readdy.ai/image/afbc586926feb1f7b189e0eef72017ff/7b11bef67ac8f18f5e2436d33de8cd61.png"
+              alt="logo"
+              class="h-12"
+            />
+          </a>
+          <div class="hidden md:flex space-x-8">
+            <a
+              href="#about"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >About Me</a
+            >
+            <a
+              href="#services"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >Services</a
+            >
+            <a
+              href="#portfolio"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >Portfolio</a
+            >
+            <a
+              href="#contact"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >Contact</a
+            >
+          </div>
+          <button class="md:hidden w-10 h-10 flex items-center justify-center">
+            <i class="ri-menu-line text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="relative overflow-hidden">
+      <div
+        class="absolute inset-0 bg-[url('https://public.readdy.ai/ai/img_res/66552e43d25e0a484c6f59ee99e3cb89.jpg')] opacity-10"
+      ></div>
+      <header class="relative container mx-auto px-4 py-20">
+        <div class="flex flex-col md:flex-row items-center gap-12">
+          <div
+            class="w-64 h-64 rounded-full overflow-hidden border-4 border-primary shadow-xl"
+          >
+            <img
+              src="https://public.readdy.ai/ai/img_res/8a7a9ff99dca90b515f75981222ea79a.jpg"
+              alt="Isabella Rose"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="flex-1 text-center md:text-left">
+            <h1 class="text-5xl font-bold mb-4 text-gray-900">Isabella Rose</h1>
+            <h2 class="text-2xl text-primary font-semibold mb-4">
+              Professional Makeup Artist & Beauty Expert
+            </h2>
+            <p class="text-lg text-gray-700 max-w-2xl">
+              Transforming faces and enhancing natural beauty through the art of
+              makeup. With over 8 years of experience in the beauty industry, I
+              specialize in creating stunning looks for weddings, editorial
+              shoots, and special events.
+            </p>
+          </div>
+        </div>
+      </header>
+      <section class="relative container mx-auto px-4 py-16">
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
+          <h3 class="text-2xl font-bold mb-6 text-gray-900">
+            Professional Summary
+          </h3>
+          <p class="text-gray-700 mb-8">
+            As a passionate makeup artist with expertise in various beauty
+            techniques, I specialize in creating personalized looks that enhance
+            each client's unique features. My approach combines artistic vision
+            with technical precision to deliver stunning transformations.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <span
+              class="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium"
+              >Bridal Makeup</span
+            >
+            <span
+              class="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium"
+              >Editorial</span
+            >
+            <span
+              class="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium"
+              >Special Effects</span
+            >
+            <span
+              class="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium"
+              >Airbrush Technique</span
+            >
+            <span
+              class="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium"
+              >Color Theory</span
+            >
+            <span
+              class="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium"
+              >Skincare</span
+            >
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold mb-6 text-gray-900">
+              Experience Timeline
+            </h3>
+            <div class="space-y-6">
+              <div class="relative pl-8 border-l-2 border-primary/30">
+                <div
+                  class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary"
+                ></div>
+                <h4 class="font-semibold text-gray-900">Lead Makeup Artist</h4>
+                <p class="text-sm text-gray-600">
+                  Glamour Studios • 2023 - Present
+                </p>
+                <p class="mt-2 text-gray-700">
+                  Leading a team of artists for high-profile fashion shows and
+                  editorial shoots.
+                </p>
+              </div>
+              <div class="relative pl-8 border-l-2 border-primary/30">
+                <div
+                  class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary"
+                ></div>
+                <h4 class="font-semibold text-gray-900">
+                  Bridal Makeup Specialist
+                </h4>
+                <p class="text-sm text-gray-600">
+                  Beauty Atelier • 2020 - 2023
+                </p>
+                <p class="mt-2 text-gray-700">
+                  Created signature looks for 200+ brides and their wedding
+                  parties.
+                </p>
+              </div>
+              <div class="relative pl-8 border-l-2 border-primary/30">
+                <div
+                  class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-primary"
+                ></div>
+                <h4 class="font-semibold text-gray-900">
+                  Freelance Makeup Artist
+                </h4>
+                <p class="text-sm text-gray-600">Self-Employed • 2018 - 2020</p>
+                <p class="mt-2 text-gray-700">
+                  Built a loyal clientele through personalized beauty services.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-bold mb-6 text-gray-900">
+              Skills Overview
+            </h3>
+            <div id="skillChart" class="skill-chart"></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-lg p-8 mt-12">
+          <h3 class="text-2xl font-bold mb-8 text-gray-900">
+            Quick Facts About Me
+          </h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="text-center">
+              <div
+                class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center"
+              >
+                <i class="ri-award-line text-primary text-2xl"></i>
+              </div>
+              <h4 class="font-medium text-gray-900">500+ Brides</h4>
+              <p class="text-sm text-gray-600">Made Beautiful</p>
+            </div>
+            <div class="text-center">
+              <div
+                class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center"
+              >
+                <i class="ri-camera-line text-primary text-2xl"></i>
+              </div>
+              <h4 class="font-medium text-gray-900">50+ Magazine</h4>
+              <p class="text-sm text-gray-600">Features</p>
+            </div>
+            <div class="text-center">
+              <div
+                class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center"
+              >
+                <i class="ri-movie-line text-primary text-2xl"></i>
+              </div>
+              <h4 class="font-medium text-gray-900">10+ TV Shows</h4>
+              <p class="text-sm text-gray-600">Makeup Artist</p>
+            </div>
+            <div class="text-center">
+              <div
+                class="w-16 h-16 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center"
+              >
+                <i class="ri-brush-line text-primary text-2xl"></i>
+              </div>
+              <h4 class="font-medium text-gray-900">Beauty Educator</h4>
+              <p class="text-sm text-gray-600">Workshop Leader</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class="bg-gray-900 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="font-['Pacifico'] text-3xl mb-6">logo</h3>
+            <p class="text-gray-400">
+              Professional makeup artistry services for all occasions. Creating
+              stunning looks for weddings, editorial shoots, and special events.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#about"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >About Me</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#services"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Services</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#portfolio"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Portfolio</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#contact"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Contact</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Contact</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li class="flex items-center gap-2">
+                <i class="ri-map-pin-line"></i>
+                <span>123 Makeup Studio, New York, NY 10001</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="ri-phone-line"></i>
+                <span>+1 (555) 123-4567</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="ri-mail-line"></i>
+                <span>contact@isabellarose.com</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Business Hours</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li>Monday - Friday: 9:00 AM - 7:00 PM</li>
+              <li>Saturday: 10:00 AM - 6:00 PM</li>
+              <li>Sunday: By Appointment</li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400"
+        >
+          <p>&copy; 2025 Isabella Rose. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script>
+      const skillChart = echarts.init(document.getElementById("skillChart"));
+      const option = {
+        animation: false,
+        radar: {
+          indicator: [
+            { name: "Bridal Makeup", max: 100 },
+            { name: "Color Theory", max: 100 },
+            { name: "Skincare", max: 100 },
+            { name: "Special Effects", max: 100 },
+            { name: "Airbrush", max: 100 },
+            { name: "Client Relations", max: 100 },
+          ],
+          radius: "65%",
+          splitNumber: 4,
+          axisLine: {
+            lineStyle: {
+              color: "#e5e7eb",
+            },
+          },
+          splitLine: {
+            lineStyle: {
+              color: "#e5e7eb",
+            },
+          },
+          splitArea: {
+            show: true,
+            areaStyle: {
+              color: ["#fff", "#fff", "#fff", "#fff"],
+            },
+          },
+        },
+        series: [
+          {
+            type: "radar",
+            data: [
+              {
+                value: [95, 90, 85, 90, 88, 82],
+                name: "Skills",
+                symbol: "none",
+                lineStyle: {
+                  color: "#C292FC",
+                },
+                areaStyle: {
+                  color: "rgba(194, 146, 252, 0.1)",
+                },
+              },
+            ],
+          },
+        ],
+      };
+      skillChart.setOption(option);
+      window.addEventListener("resize", () => {
+        skillChart.resize();
+      });
+    </script>
+  </body>
+</html>
