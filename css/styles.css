@@ -1,0 +1,38 @@
+/* Consolidated styles from all pages */
+:where([class^="ri-"])::before {
+  content: "\f3c2";
+}
+
+/* about.html specific */
+body {
+  font-family: "Inter", sans-serif;
+}
+.skill-chart {
+  height: 300px;
+}
+
+/* contact.html specific */
+.testimonial-slider {
+  transition: transform 0.3s ease-in-out;
+}
+.date-picker-cell {
+  transition: all 0.2s ease;
+}
+.date-picker-cell:hover:not(.disabled) {
+  background-color: #c292fc;
+  color: white;
+}
+.time-slot {
+  transition: all 0.2s ease;
+}
+.time-slot:hover:not(.disabled) {
+  background-color: #c292fc;
+  color: white;
+}
+
+/* Portfolio.html specific */
+.portfolio-item-hidden {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+}
