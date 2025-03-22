@@ -40,11 +40,59 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ... Portfolio filter functionality ...
+  // Updated Portfolio filter functionality: dynamically populate one row at a time
   const portfolioFilter = document.getElementById("portfolio-filter");
-  if (portfolioFilter) {
+  const portfolioGrid = document.getElementById("portfolio-grid");
+  // Data object with image info for each category
+  const portfolioData = {
+    bridal: [
+      { src: "photos/fete/bridal1.png", alt: "Bridal Makeup", label: "Bridal Makeup" },
+      { src: "photos/fete/bridal2.jpeg", alt: "Bridal Makeup", label: "Bridal Makeup" },
+      { src: "photos/fete/bridal3.png", alt: "Bridal Makeup", label: "Bridal Makeup" }
+    ],
+    editorial: [
+      { src: "photos/fete/editorial1.jpeg", alt: "Editorial Makeup", label: "Editorial Makeup" },
+      { src: "photos/fete/editorial2.jpeg", alt: "Editorial Makeup", label: "Editorial Makeup" },
+      { src: "photos/fete/editorial3.jpeg", alt: "Editorial Makeup", label: "Editorial Makeup" }
+    ],
+    special: [
+      { src: "photos/fete/evening1.jpeg", alt: "Evening Makeup", label: "Evening Makeup" },
+      { src: "photos/fete/evening2.jpeg", alt: "Evening Makeup", label: "Evening Makeup" },
+      { src: "photos/fete/evening3.jpeg", alt: "Evening Makeup", label: "Evening Makeup" }
+    ]
+  };
+  
+  function createPortfolioItem({src, alt, label}) {
+    const div = document.createElement("div");
+    div.className = "relative group overflow-hidden rounded cursor-pointer transition-all duration-300 portfolio-item";
+    div.innerHTML = `
+      <img src="${src}" alt="${alt}" class="w-full h-[400px] object-cover" />
+      <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+        <p class="text-white text-lg font-semibold">${label}</p>
+      </div>
+    `;
+    return div;
+  }
+  
+  function applyFilter(category) {
+    // Clear the grid first
+    portfolioGrid.innerHTML = "";
+    let items = [];
+    if (category === "all") {
+      // Show first image from each category in order: bridal, editorial, special.
+      items.push(portfolioData.bridal[0], portfolioData.editorial[0], portfolioData.special[0]);
+    } else {
+      // For a specific filter, show max 3 items from that category.
+      items = portfolioData[category].slice(0, 3);
+    }
+    // Append items dynamically.
+    items.forEach(data => {
+      portfolioGrid.appendChild(createPortfolioItem(data));
+    });
+  }
+  
+  if (portfolioFilter && portfolioGrid) {
     const buttons = portfolioFilter.querySelectorAll("button");
-    const items = document.querySelectorAll("#portfolio-grid > div");
     buttons.forEach(function (button) {
       button.addEventListener("click", function () {
         const category = button.getAttribute("data-category");
@@ -54,15 +102,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         button.classList.remove("text-gray-700");
         button.classList.add("bg-primary", "text-white");
-        items.forEach(function (item) {
-          if (category === "all" || item.getAttribute("data-category") === category) {
-            item.classList.remove("portfolio-item-hidden");
-          } else {
-            item.classList.add("portfolio-item-hidden");
-          }
-        });
+        applyFilter(category);
       });
     });
+    // Auto-trigger "all" filter on page load.
+    applyFilter("all");
   }
 
   // Updated infinite continuous Testimonial slider functionality ...
@@ -127,10 +171,10 @@ document.addEventListener("DOMContentLoaded", function () {
             </button>
           </div>
           <div class="flex flex-col space-y-4">
-            <a href="#about" class="text-gray-700 hover:text-primary transition-colors">About Me</a>
-            <a href="#services" class="text-gray-700 hover:text-primary transition-colors">Services</a>
-            <a href="#portfolio" class="text-gray-700 hover:text-primary transition-colors">Portfolio</a>
-            <a href="#contact" class="text-gray-700 hover:text-primary transition-colors">Contact</a>
+            <a href="about.html" class="text-gray-700 hover:text-primary transition-colors">About Me</a>
+            <a href="/Portfolio.html#services" class="text-gray-700 hover:text-primary transition-colors">Services</a>
+            <a href="/Portfolio.html#portfolio" class="text-gray-700 hover:text-primary transition-colors">Portfolio</a>
+            <a href="contact.html" class="text-gray-700 hover:text-primary transition-colors">Contact</a>
           </div>
         </div>
       </div>
@@ -144,11 +188,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ... Date-picker and Time-slot generation for contact.html ...
+  // Date-picker and Time-slot generation for contact.html
   const datePicker = document.getElementById("date-picker");
   if (datePicker) {
-    // Force current date to 17/03/2025 for demonstration (months are 0-indexed)
-    const currentDate = new Date(2025, 2, 17);
+    // Use the actual current date instead of a forced demo date
+    const currentDate = new Date();
     const today = new Date(currentDate);
     today.setHours(0, 0, 0, 0);
     let dayOfWeek = currentDate.getDay(); // 0 (Sun) ... 6 (Sat)
