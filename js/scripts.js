@@ -157,6 +157,54 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // Diploma slider functionality
+  const diplomaSlider = document.querySelector(".diploma-slider");
+  if (diplomaSlider) {
+    const prevButton = document.querySelector(".diploma-prev");
+    const nextButton = document.querySelector(".diploma-next");
+    const visibleSlides = 4;
+    const originalSlides = Array.from(diplomaSlider.children);
+    const originalCount = originalSlides.length;
+    // Clone first 'visibleSlides' and append them
+    originalSlides.slice(0, visibleSlides).forEach(slide => {
+      diplomaSlider.appendChild(slide.cloneNode(true));
+    });
+    // Clone last 'visibleSlides' and prepend them
+    originalSlides.slice(-visibleSlides).forEach(slide => {
+      const clone = slide.cloneNode(true);
+      diplomaSlider.insertBefore(clone, diplomaSlider.firstChild);
+    });
+    const totalSlides = diplomaSlider.children.length;
+    let currentSlide = visibleSlides; // start at first original slide
+    function updateSlider(animate = true) {
+      diplomaSlider.style.transition = animate ? "transform 0.3s" : "none";
+      diplomaSlider.style.transform = `translateX(-${currentSlide * (100 / visibleSlides)}%)`;
+    }
+    // Initialize slider position without animation
+    updateSlider(false);
+    // On transition end, jump seamlessly if at clones
+    diplomaSlider.addEventListener("transitionend", function () {
+      if (currentSlide >= originalCount + visibleSlides) {
+        currentSlide = visibleSlides;
+        updateSlider(false);
+      }
+      if (currentSlide < visibleSlides) {
+        currentSlide = originalCount + currentSlide;
+        updateSlider(false);
+      }
+    });
+    if (prevButton && nextButton) {
+      prevButton.addEventListener("click", function () {
+        currentSlide--;
+        updateSlider();
+      });
+      nextButton.addEventListener("click", function () {
+        currentSlide++;
+        updateSlider();
+      });
+    }
+  }
+
   // ... Mobile menu functionality ...
   const mobileMenuButton = document.querySelector("button.md\\:hidden");
   if (mobileMenuButton) {
@@ -190,21 +238,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Date-picker and Time-slot generation for contact.html
   const datePicker = document.getElementById("date-picker");
-  if (datePicker) {
-    // Use the actual current date instead of a forced demo date
-    const currentDate = new Date();
-    const today = new Date(currentDate);
-    today.setHours(0, 0, 0, 0);
-    let dayOfWeek = currentDate.getDay(); // 0 (Sun) ... 6 (Sat)
-    let mondayDiff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    const monday = new Date(currentDate);
-    monday.setDate(currentDate.getDate() + mondayDiff);
+  // Calculate the Monday of the current week (week containing today's date)
+  const today = new Date();
+  const dayOfWeek = today.getDay();
+  let currentMonday = new Date(today);
+  currentMonday.setDate(today.getDate() - ((dayOfWeek === 0 ? 7 : dayOfWeek) - 1));
+
+  let selectedDate = null;
+  let selectedTime = null;
+
+  function generateWeek(startDate) {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
     for (let i = 0; i < 7; i++) {
-      const date = new Date(monday);
-      date.setDate(monday.getDate() + i);
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
       const cell = document.createElement("div");
       cell.className = "py-2 rounded text-center cursor-pointer transition-colors";
-      if (date.getTime() < today.getTime()) {
+      if (date.getTime() < now.getTime()) {
         cell.classList.add("bg-gray-300", "text-gray-500", "cursor-not-allowed");
       } else {
         cell.classList.add("bg-white", "text-gray-700", "hover:bg-primary", "hover:text-white");
@@ -213,15 +264,47 @@ document.addEventListener("DOMContentLoaded", function () {
             el.classList.remove("bg-primary", "text-white", "ring-2", "ring-primary");
           });
           cell.classList.add("bg-primary", "text-black", "ring-2", "ring-primary");
+          selectedDate = date;
         });
       }
       cell.textContent = date.getDate();
       datePicker.appendChild(cell);
     }
   }
+
+  function generateTwoWeeks() {
+    datePicker.innerHTML = "";
+    generateWeek(currentMonday);
+    const nextMonday = new Date(currentMonday);
+    nextMonday.setDate(currentMonday.getDate() + 7);
+    generateWeek(nextMonday);
+  }
+
+  if (datePicker) {
+    generateTwoWeeks();
+  }
+
+  // Schedule a weekly update at the upcoming Monday midnight
+  function scheduleCalendarUpdate() {
+    const now = new Date();
+    const nextMonday = new Date(now);
+    nextMonday.setDate(now.getDate() + ((8 - now.getDay()) % 7));
+    nextMonday.setHours(0, 0, 0, 0);
+    const timeout = nextMonday.getTime() - now.getTime();
+    setTimeout(() => {
+      currentMonday = new Date(nextMonday);
+      generateTwoWeeks();
+      scheduleCalendarUpdate();
+    }, timeout);
+  }
+
+  if (datePicker) {
+    scheduleCalendarUpdate();
+  }
+
   const timeSlotsContainer = document.getElementById("time-slots");
   if (timeSlotsContainer) {
-    for (let hour = 14; hour <= 20; hour++) {
+    for (let hour = 17; hour <= 20; hour++) {
       const slot = document.createElement("div");
       slot.className = "py-2 rounded text-center cursor-pointer border hover:bg-primary hover:text-white transition-colors";
       slot.textContent = hour + ":00";
@@ -230,9 +313,39 @@ document.addEventListener("DOMContentLoaded", function () {
           el.classList.remove("bg-primary", "text-white");
         });
         slot.classList.add("bg-primary", "text-white");
+        selectedTime = slot.textContent;
       });
       timeSlotsContainer.appendChild(slot);
     }
+  }
+
+  // Form validation and submission handling
+  const bookingForm = document.getElementById("booking-form");
+  const formMessage = document.getElementById("form-message");
+
+  if (bookingForm) {
+    bookingForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const formData = new FormData(bookingForm);
+      let allFieldsFilled = true;
+
+      for (let [name, value] of formData.entries()) {
+        if (!value) {
+          allFieldsFilled = false;
+          break;
+        }
+      }
+
+      if (allFieldsFilled && selectedDate && selectedTime) {
+        formData.append("date", selectedDate.toLocaleDateString());
+        formData.append("time", selectedTime);
+        formMessage.textContent = "Booking confirmed!";
+        formMessage.className = "text-green-500";
+      } else {
+        formMessage.textContent = "Please fill in all fields and select a date and time.";
+        formMessage.className = "text-red-500";
+      }
+    });
   }
 });
 
@@ -243,12 +356,31 @@ document.addEventListener("DOMContentLoaded", function() {
     const selectElem = document.querySelector('form select');
     if (selectElem) {
       if (service.toLowerCase() === "bridal") {
-        selectElem.value = "Bridal Makeup";
+        selectElem.value = "Machiaj Mireasa";
       } else if (service.toLowerCase() === "editorial") {
-        selectElem.value = "Editorial Makeup";
+        selectElem.value = "Machiaj de Seara";
       } else if (service.toLowerCase() === "special") {
-        selectElem.value = "Special Effects";
+        selectElem.value = "Machiaj Natural";
       }
     }
   }
+});
+const btn = document.getElementById('submit-booking');
+
+document.getElementById('booking-form').addEventListener('submit', function(event) {
+  event.preventDefault(); // Previne trimiterea automată a formularului
+
+  // Trimite emailul folosind EmailJS
+  emailjs.send("SERVICE_ID", "TEMPLATE_ID", {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      service: document.getElementById('service').value,
+      date: document.getElementById('date').value,
+      time: document.getElementById('time').value
+  }).then(function(response) {
+      alert('Formular trimis cu succes!', response.status, response.text);
+  }, function(error) {
+      alert('Eroare la trimitere!', error);
+  });
 });
