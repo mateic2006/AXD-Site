@@ -400,7 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const timeSlotsContainer = document.getElementById("time-slots");
   if (timeSlotsContainer) {
-    for (let hour = 17; hour <= 20; hour++) {
+    for (let hour = 5; hour <= 20; hour++) {
       const slot = document.createElement("div");
       slot.className = "py-2 rounded text-center cursor-pointer border hover:bg-primary hover:text-white transition-colors";
       slot.textContent = hour + ":00";
