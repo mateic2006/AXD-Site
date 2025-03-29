@@ -95,7 +95,7 @@
         >
           Serviciile Noastre
         </h2>
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-4 gap-8">
           <div class="bg-white p-8 rounded shadow-sm">
             <div
               class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6"
@@ -104,11 +104,29 @@
             </div>
             <h3 class="text-xl font-semibold mb-4">Machiaj Mireasă</h3>
             <p class="text-gray-600 mb-6">
-              Serviciu complet de machiaj pentru mireasă, incluzând probe, machiaj în ziua nunții și retușuri.
+                Machiaj profesional pentru ziua nunții, perfect pentru a evidenția frumusețea naturală a miresei.
             </p>
             <p class="text-2xl font-['Playfair_Display'] mb-6">180 lei</p>
             <button
               onclick="window.location.href='contact.html?service=bridal'"
+              class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer"
+            >
+              Rezervă acum
+            </button>
+          </div>
+          <div class="bg-white p-8 rounded shadow-sm">
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6"
+            >
+              <i class="ri-brush-3-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-4">Proba Mireasă</h3>
+            <p class="text-gray-600 mb-6">
+                Machiaj de probă înaintea nunții pentru a stabili împreună look-ul perfect pentru ziua cea mare.
+            </p>
+            <p class="text-2xl font-['Playfair_Display'] mb-6">160 lei</p>
+            <button
+              onclick="window.location.href='contact.html?service=bridal-trial'"
               class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer"
             >
               Rezervă acum
@@ -162,39 +180,22 @@
         >
           Portofoliu
         </h2>
-        <div class="flex justify-center mb-12">
-          <div
-            class="inline-flex bg-gray-100 p-1 rounded-full"
-            id="portfolio-filter"
-          >
-            <button
-              class="px-6 py-2 rounded-full bg-primary text-white whitespace-nowrap cursor-pointer"
-              data-category="all"
-            >
-              Toate
-            </button>
-            <button
-              class="px-6 py-2 rounded-full text-gray-700 whitespace-nowrap cursor-pointer"
-              data-category="bridal"
-            >
-              Mireasă
-            </button>
-            <button
-              class="px-6 py-2 rounded-full text-gray-700 whitespace-nowrap cursor-pointer"
-              data-category="editorial"
-            >
-              Seară
-            </button>
-            <button
-              class="px-6 py-2 rounded-full text-gray-700 whitespace-nowrap cursor-pointer"
-              data-category="special"
-            >
-              Natural
-            </button>
+        <div class="relative">
+          <div class="overflow-hidden">
+            <div class="portfolio-slider flex transition-transform duration-300">
+              <!-- Images will be populated by JavaScript -->
+            </div>
           </div>
-        </div>
-        <div class="grid md:grid-cols-3 gap-8" id="portfolio-grid">
-          <!-- The row will be dynamically populated -->
+          <button
+            class="portfolio-prev absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md cursor-pointer z-10"
+          >
+            <i class="ri-arrow-left-s-line"></i>
+          </button>
+          <button
+            class="portfolio-next absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md cursor-pointer z-10"
+          >
+            <i class="ri-arrow-right-s-line"></i>
+          </button>
         </div>
       </div>
     </section>

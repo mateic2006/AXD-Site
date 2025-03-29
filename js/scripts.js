@@ -1,72 +1,106 @@
 document.addEventListener("DOMContentLoaded", function () {
   
-  // Updated Portfolio filter functionality: dynamically populate one row at a time
-  const portfolioFilter = document.getElementById("portfolio-filter");
-  const portfolioGrid = document.getElementById("portfolio-grid");
-  // Data object with image info for each category
-  const portfolioData = {
-    bridal: [
-      { src: "photos/fete/bridal1.png", alt: "Bridal Makeup", label: "Bridal Makeup" },
-      { src: "photos/fete/bridal2.jpeg", alt: "Bridal Makeup", label: "Bridal Makeup" },
-      { src: "photos/fete/bridal3.png", alt: "Bridal Makeup", label: "Bridal Makeup" }
-    ],
-    editorial: [
-      { src: "photos/fete/editorial1.jpeg", alt: "Editorial Makeup", label: "Editorial Makeup" },
-      { src: "photos/fete/editorial2.jpeg", alt: "Editorial Makeup", label: "Editorial Makeup" },
-      { src: "photos/fete/editorial3.jpeg", alt: "Editorial Makeup", label: "Editorial Makeup" }
-    ],
-    special: [
-      { src: "photos/fete/evening1.jpeg", alt: "Evening Makeup", label: "Evening Makeup" },
-      { src: "photos/fete/evening2.jpeg", alt: "Evening Makeup", label: "Evening Makeup" },
-      { src: "photos/fete/evening3.jpeg", alt: "Evening Makeup", label: "Evening Makeup" }
-    ]
-  };
-  
-  function createPortfolioItem({src, alt, label}) {
-    const div = document.createElement("div");
-    div.className = "relative group overflow-hidden rounded cursor-pointer transition-all duration-300 portfolio-item";
-    div.innerHTML = `
-      <img src="${src}" alt="${alt}" class="w-full h-[400px] object-cover" />
-      <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-        <p class="text-white text-lg font-semibold">${label}</p>
-      </div>
-    `;
-    return div;
-  }
-  
-  function applyFilter(category) {
-    // Clear the grid first
-    portfolioGrid.innerHTML = "";
-    let items = [];
-    if (category === "all") {
-      // Show first image from each category in order: bridal, editorial, special.
-      items.push(portfolioData.bridal[0], portfolioData.editorial[0], portfolioData.special[0]);
-    } else {
-      // For a specific filter, show max 3 items from that category.
-      items = portfolioData[category].slice(0, 3);
+  // Portfolio slider functionality
+  const portfolioSlider = document.querySelector(".portfolio-slider");
+  if (portfolioSlider) {
+    const prevButton = document.querySelector(".portfolio-prev");
+    const nextButton = document.querySelector(".portfolio-next");
+    
+    // Function to get visible slides based on screen width
+    function getVisibleSlides() {
+      return window.innerWidth < 768 ? 1 : 3; // 1 slide for mobile, 3 for desktop
     }
-    // Append items dynamically.
-    items.forEach(data => {
-      portfolioGrid.appendChild(createPortfolioItem(data));
+    
+    let visibleSlides = getVisibleSlides();
+    const totalImages = 20;
+    
+    // Create slides for all images
+    for (let i = 1; i <= totalImages; i++) {
+      const slide = document.createElement("div");
+      slide.className = "w-full md:w-1/3 flex-shrink-0 px-4";
+      slide.innerHTML = `
+        <div class="relative group aspect-square overflow-hidden rounded">
+          <img
+            src="photos/fete/${i}.jpeg"
+            alt="Portfolio ${i}"
+            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <p class="text-white text-lg font-semibold"></p>
+          </div>
+        </div>
+      `;
+      portfolioSlider.appendChild(slide.cloneNode(true));
+    }
+
+    // Clone slides for infinite effect
+    const originalSlides = Array.from(portfolioSlider.children);
+    
+    // Add clones at the end
+    originalSlides.slice(0, visibleSlides).forEach(slide => {
+      portfolioSlider.appendChild(slide.cloneNode(true));
     });
-  }
-  
-  if (portfolioFilter && portfolioGrid) {
-    const buttons = portfolioFilter.querySelectorAll("button");
-    buttons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        const category = button.getAttribute("data-category");
-        buttons.forEach(btn => {
-          btn.classList.remove("bg-primary", "text-white");
-          btn.classList.add("text-gray-700");
-        });
-        button.classList.remove("text-gray-700");
-        button.classList.add("bg-primary", "text-white");
-        applyFilter(category);
+    
+    // Add clones at the start
+    originalSlides.slice(-visibleSlides).forEach(slide => {
+      portfolioSlider.insertBefore(slide.cloneNode(true), portfolioSlider.firstChild);
+    });
+
+    let currentSlide = visibleSlides;
+    let isAnimating = false;
+
+    function updateSlider(animate = true) {
+      if (isAnimating) return;
+      
+      const slideWidth = 100 / visibleSlides;
+      portfolioSlider.style.transition = animate ? "transform 0.3s" : "none";
+      portfolioSlider.style.transform = `translateX(-${currentSlide * slideWidth}%)`;
+      
+      if (animate) {
+        isAnimating = true;
+      }
+    }
+
+    // Initialize slider position without animation
+    updateSlider(false);
+
+    portfolioSlider.addEventListener("transitionend", function() {
+      isAnimating = false;
+      if (currentSlide >= totalImages + visibleSlides) {
+        currentSlide = visibleSlides;
+        updateSlider(false);
+      }
+      if (currentSlide < visibleSlides) {
+        currentSlide = totalImages + currentSlide;
+        updateSlider(false);
+      }
+    });
+
+    if (prevButton && nextButton) {
+      prevButton.addEventListener("click", function() {
+        if (!isAnimating) {
+          currentSlide--;
+          updateSlider(true);
+        }
       });
+      nextButton.addEventListener("click", function() {
+        if (!isAnimating) {
+          currentSlide++;
+          updateSlider(true);
+        }
+      });
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+      const newVisibleSlides = getVisibleSlides();
+      if (newVisibleSlides !== visibleSlides) {
+        visibleSlides = newVisibleSlides;
+        // Reinitialize slider with new visible slides count
+        currentSlide = visibleSlides;
+        updateSlider(false);
+      }
     });
-    // Auto-trigger "all" filter on page load.
-    applyFilter("all");
   }
 
   // Testimonial slider functionality with mobile support
@@ -392,6 +426,8 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectElem) {
       if (service.toLowerCase() === "bridal") {
         selectElem.value = "Machiaj Mireasa";
+      } else if (service.toLowerCase() === "bridal-trial") {
+        selectElem.value = "Proba Mireasă";
       } else if (service.toLowerCase() === "editorial") {
         selectElem.value = "Machiaj de Seara";
       } else if (service.toLowerCase() === "special") {
