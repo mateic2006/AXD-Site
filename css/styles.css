@@ -30,7 +30,39 @@ body {
   color: white;
 }
 
-/* Portfolio.html specific */
+/* Slider Styles */
+.testimonial-slider,
+.diploma-slider {
+  display: flex;
+  transition: transform 0.3s ease;
+  width: 100%;
+}
+
+.testimonial-slider > *,
+.diploma-slider > * {
+  flex: 0 0 auto;
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .testimonial-slider > *,
+  .diploma-slider > * {
+    width: 100%;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .testimonial-slider > * {
+    width: calc(100% / 3);
+  }
+  
+  .diploma-slider > * {
+    width: 25%;
+  }
+}
+
+/* Index specific */
 .portfolio-item-hidden {
   opacity: 0;
   transform: scale(0.8);

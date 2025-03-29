@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contact - Portofoliu Makeup Artist</title>
+    <link rel="icon" href="/photos/light-logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="js/tailwind-config-portfolio.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
       rel="stylesheet"
@@ -19,21 +18,17 @@
     <link rel="stylesheet" href="css/styles.css" />
     <!-- Add EmailJS library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script type="text/javascript">
-      (function() {
-        emailjs.init({ publicKey: "1_FGRHSxLvZFvkJMX" });
-      })();
-    </script>
+    <script src="js/email-handler.js"></script>
   </head>
   <body class="bg-white font-['Poppins']">
     <nav class="fixed w-full bg-white/80 backdrop-blur-md z-50 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
-          <a href="/Portfolio.html" class="h-16 flex items-center">
+          <a href="/index.html" class="h-16 flex items-center">
             <img
               src="photos/light-logo.png"
               alt="logo"
-              class="h-12"
+              class="h-16"
             />
           </a>
           <div class="hidden md:flex space-x-8">
@@ -43,12 +38,12 @@
               >Despre mine</a
             >
             <a
-              href="Portfolio.html#services"
+              href="index.html#services"
               class="text-gray-700 hover:text-primary transition-colors"
               >Servicii</a
             >
             <a
-              href="Portfolio.html"
+              href="index.html"
               class="text-gray-700 hover:text-primary transition-colors"
               >Portofoliu</a
             >
@@ -169,6 +164,9 @@
                     <option>Machiaj Natural</option>
                   </select>
                 </div>
+                <!-- Hidden inputs for date and time -->
+                <input type="hidden" id="date" name="date" required />
+                <input type="hidden" id="time" name="time" required />
                 <button
                   type="submit"
                   id="submit-booking"
@@ -189,7 +187,7 @@
             <img
               src="photos/dark-logo.png"
               alt="logo"
-              class="h-12 mb-6 mix-blend-screen"
+              class="h-14 mb-6 mix-blend-screen"
             />
             <p class="text-gray-400">
               Servicii profesionale de machiaj pentru toate ocaziile.
@@ -207,14 +205,14 @@
               </li>
               <li>
                 <a
-                  href="Portfolio.html#services"
+                  href="index.html#services"
                   class="text-gray-400 hover:text-white transition-colors"
                   >Servicii</a
                 >
               </li>
               <li>
                 <a
-                  href="Portfolio.html#portfolio"
+                  href="index.html#portfolio"
                   class="text-gray-400 hover:text-white transition-colors"
                   >Portofoliu</a
                 >

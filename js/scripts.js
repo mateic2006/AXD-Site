@@ -1,45 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // ... ECharts initialization for about.html ...
-  const skillElem = document.getElementById("skillChart");
-  if (skillElem) {
-    const chart = echarts.init(skillElem);
-    const option = {
-      animation: false,
-      radar: {
-        indicator: [
-          { name: "Bridal Makeup", max: 100 },
-          { name: "Color Theory", max: 100 },
-          { name: "Skincare", max: 100 },
-          { name: "Special Effects", max: 100 },
-          { name: "Airbrush", max: 100 },
-          { name: "Client Relations", max: 100 }
-        ],
-        radius: "65%",
-        splitNumber: 4,
-        axisLine: { lineStyle: { color: "#e5e7eb" } },
-        splitLine: { lineStyle: { color: "#e5e7eb" } },
-        splitArea: {
-          show: true,
-          areaStyle: { color: ["#fff", "#fff", "#fff", "#fff"] }
-        }
-      },
-      series: [{
-        type: "radar",
-        data: [{
-          value: [95, 90, 85, 90, 88, 82],
-          name: "Skills",
-          symbol: "none",
-          lineStyle: { color: "#C292FC" },
-          areaStyle: { color: "rgba(194, 146, 252, 0.1)" }
-        }]
-      }]
-    };
-    chart.setOption(option);
-    window.addEventListener("resize", function () {
-      chart.resize();
-    });
-  }
-
+  
   // Updated Portfolio filter functionality: dynamically populate one row at a time
   const portfolioFilter = document.getElementById("portfolio-filter");
   const portfolioGrid = document.getElementById("portfolio-grid");
@@ -109,33 +69,57 @@ document.addEventListener("DOMContentLoaded", function () {
     applyFilter("all");
   }
 
-  // Updated infinite continuous Testimonial slider functionality ...
+  // Testimonial slider functionality with mobile support
   const testimonialSlider = document.querySelector(".testimonial-slider");
   if (testimonialSlider) {
     const prevButton = document.querySelector(".testimonial-prev");
     const nextButton = document.querySelector(".testimonial-next");
-    const visibleSlides = 3;
+    
+    // Function to get visible slides based on screen width
+    function getVisibleSlides() {
+      return window.innerWidth < 768 ? 1 : 3; // 1 slide for mobile, 3 for desktop
+    }
+    
+    let visibleSlides = getVisibleSlides();
     const originalSlides = Array.from(testimonialSlider.children);
     const originalCount = originalSlides.length;
-    // Clone first 'visibleSlides' and append them
+    
+    // Clear existing clones
+    testimonialSlider.innerHTML = "";
+    
+    // Re-add original slides
+    originalSlides.forEach(slide => {
+      testimonialSlider.appendChild(slide.cloneNode(true));
+    });
+    
+    // Clone slides
     originalSlides.slice(0, visibleSlides).forEach(slide => {
       testimonialSlider.appendChild(slide.cloneNode(true));
     });
-    // Clone last 'visibleSlides' and prepend them
     originalSlides.slice(-visibleSlides).forEach(slide => {
-      const clone = slide.cloneNode(true);
-      testimonialSlider.insertBefore(clone, testimonialSlider.firstChild);
+      testimonialSlider.insertBefore(slide.cloneNode(true), testimonialSlider.firstChild);
     });
-    const totalSlides = testimonialSlider.children.length;
-    let currentSlide = visibleSlides; // start at first original slide
+
+    let currentSlide = visibleSlides;
+    let isAnimating = false;
+
     function updateSlider(animate = true) {
+      if (isAnimating) return;
+      
+      const slideWidth = 100 / visibleSlides;
       testimonialSlider.style.transition = animate ? "transform 0.3s" : "none";
-      testimonialSlider.style.transform = `translateX(-${currentSlide * (100 / visibleSlides)}%)`;
+      testimonialSlider.style.transform = `translateX(-${currentSlide * slideWidth}%)`;
+      
+      if (animate) {
+        isAnimating = true;
+      }
     }
+
     // Initialize slider position without animation
     updateSlider(false);
-    // On transition end, jump seamlessly if at clones
-    testimonialSlider.addEventListener("transitionend", function () {
+
+    testimonialSlider.addEventListener("transitionend", function() {
+      isAnimating = false;
       if (currentSlide >= originalCount + visibleSlides) {
         currentSlide = visibleSlides;
         updateSlider(false);
@@ -145,45 +129,85 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSlider(false);
       }
     });
+
     if (prevButton && nextButton) {
-      prevButton.addEventListener("click", function () {
-        currentSlide--;
-        updateSlider();
+      prevButton.addEventListener("click", function() {
+        if (!isAnimating) {
+          currentSlide--;
+          updateSlider(true);
+        }
       });
-      nextButton.addEventListener("click", function () {
-        currentSlide++;
-        updateSlider();
+      nextButton.addEventListener("click", function() {
+        if (!isAnimating) {
+          currentSlide++;
+          updateSlider(true);
+        }
       });
     }
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+      const newVisibleSlides = getVisibleSlides();
+      if (newVisibleSlides !== visibleSlides) {
+        visibleSlides = newVisibleSlides;
+        // Reinitialize slider with new visible slides count
+        currentSlide = visibleSlides;
+        updateSlider(false);
+      }
+    });
   }
 
-  // Diploma slider functionality
+  // Diploma slider functionality with mobile support
   const diplomaSlider = document.querySelector(".diploma-slider");
   if (diplomaSlider) {
     const prevButton = document.querySelector(".diploma-prev");
     const nextButton = document.querySelector(".diploma-next");
-    const visibleSlides = 4;
+    
+    // Function to get visible slides based on screen width
+    function getVisibleSlides() {
+      return window.innerWidth < 768 ? 1 : 4; // 1 slide for mobile, 4 for desktop
+    }
+    
+    let visibleSlides = getVisibleSlides();
     const originalSlides = Array.from(diplomaSlider.children);
     const originalCount = originalSlides.length;
-    // Clone first 'visibleSlides' and append them
+    
+    // Clear existing clones
+    diplomaSlider.innerHTML = "";
+    
+    // Re-add original slides
+    originalSlides.forEach(slide => {
+      diplomaSlider.appendChild(slide.cloneNode(true));
+    });
+    
+    // Clone slides
     originalSlides.slice(0, visibleSlides).forEach(slide => {
       diplomaSlider.appendChild(slide.cloneNode(true));
     });
-    // Clone last 'visibleSlides' and prepend them
     originalSlides.slice(-visibleSlides).forEach(slide => {
-      const clone = slide.cloneNode(true);
-      diplomaSlider.insertBefore(clone, diplomaSlider.firstChild);
+      diplomaSlider.insertBefore(slide.cloneNode(true), diplomaSlider.firstChild);
     });
-    const totalSlides = diplomaSlider.children.length;
-    let currentSlide = visibleSlides; // start at first original slide
+
+    let currentSlide = visibleSlides;
+    let isAnimating = false;
+
     function updateSlider(animate = true) {
+      if (isAnimating) return;
+      
+      const slideWidth = 100 / visibleSlides;
       diplomaSlider.style.transition = animate ? "transform 0.3s" : "none";
-      diplomaSlider.style.transform = `translateX(-${currentSlide * (100 / visibleSlides)}%)`;
+      diplomaSlider.style.transform = `translateX(-${currentSlide * slideWidth}%)`;
+      
+      if (animate) {
+        isAnimating = true;
+      }
     }
+
     // Initialize slider position without animation
     updateSlider(false);
-    // On transition end, jump seamlessly if at clones
-    diplomaSlider.addEventListener("transitionend", function () {
+
+    diplomaSlider.addEventListener("transitionend", function() {
+      isAnimating = false;
       if (currentSlide >= originalCount + visibleSlides) {
         currentSlide = visibleSlides;
         updateSlider(false);
@@ -193,46 +217,82 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSlider(false);
       }
     });
+
     if (prevButton && nextButton) {
-      prevButton.addEventListener("click", function () {
-        currentSlide--;
-        updateSlider();
+      prevButton.addEventListener("click", function() {
+        if (!isAnimating) {
+          currentSlide--;
+          updateSlider(true);
+        }
       });
-      nextButton.addEventListener("click", function () {
-        currentSlide++;
-        updateSlider();
+      nextButton.addEventListener("click", function() {
+        if (!isAnimating) {
+          currentSlide++;
+          updateSlider(true);
+        }
       });
     }
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+      const newVisibleSlides = getVisibleSlides();
+      if (newVisibleSlides !== visibleSlides) {
+        visibleSlides = newVisibleSlides;
+        // Reinitialize slider with new visible slides count
+        currentSlide = visibleSlides;
+        updateSlider(false);
+      }
+    });
   }
 
-  // ... Mobile menu functionality ...
+  // Mobile menu functionality
   const mobileMenuButton = document.querySelector("button.md\\:hidden");
   if (mobileMenuButton) {
     const mobileMenu = document.createElement("div");
-    mobileMenu.className = "fixed inset-0 bg-black bg-opacity-50 z-40 hidden";
+    mobileMenu.className = "fixed inset-0 bg-black bg-opacity-50 z-50 hidden"; // Increased z-index
     mobileMenu.innerHTML = `
       <div class="fixed right-0 top-0 h-full w-64 bg-white shadow-lg">
         <div class="p-4">
           <div class="flex justify-end">
-            <button class="w-10 h-10 flex items-center justify-center">
+            <button class="mobile-close w-10 h-10 flex items-center justify-center">
               <i class="ri-close-line text-xl"></i>
             </button>
           </div>
           <div class="flex flex-col space-y-4">
-            <a href="about.html" class="text-gray-700 hover:text-primary transition-colors">About Me</a>
-            <a href="/Portfolio.html#services" class="text-gray-700 hover:text-primary transition-colors">Services</a>
-            <a href="/Portfolio.html#portfolio" class="text-gray-700 hover:text-primary transition-colors">Portfolio</a>
+            <a href="about.html" class="text-gray-700 hover:text-primary transition-colors">Despre mine</a>
+            <a href="/index.html#services" class="text-gray-700 hover:text-primary transition-colors">Servicii</a>
+            <a href="/index.html#portfolio" class="text-gray-700 hover:text-primary transition-colors">Portofoliu</a>
             <a href="contact.html" class="text-gray-700 hover:text-primary transition-colors">Contact</a>
           </div>
         </div>
       </div>
     `;
     document.body.appendChild(mobileMenu);
-    mobileMenuButton.addEventListener("click", function () {
-      mobileMenu.classList.remove("hidden");
+
+    function toggleMobileMenu() {
+      const isHidden = mobileMenu.classList.contains("hidden");
+      if (isHidden) {
+        mobileMenu.classList.remove("hidden");
+        document.body.style.overflow = "hidden"; // Prevent scrolling when menu is open
+      } else {
+        mobileMenu.classList.add("hidden");
+        document.body.style.overflow = ""; // Restore scrolling
+      }
+    }
+
+    mobileMenuButton.addEventListener("click", toggleMobileMenu);
+    mobileMenu.querySelector(".mobile-close").addEventListener("click", toggleMobileMenu);
+    
+    // Close menu when clicking outside
+    mobileMenu.addEventListener("click", function(e) {
+      if (e.target === mobileMenu) {
+        toggleMobileMenu();
+      }
     });
-    mobileMenu.querySelector("button").addEventListener("click", function () {
-      mobileMenu.classList.add("hidden");
+
+    // Close menu when clicking on a link
+    mobileMenu.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", toggleMobileMenu);
     });
   }
 
@@ -265,6 +325,8 @@ document.addEventListener("DOMContentLoaded", function () {
           });
           cell.classList.add("bg-primary", "text-black", "ring-2", "ring-primary");
           selectedDate = date;
+          // Update hidden date input
+          document.getElementById('date').value = date.toLocaleDateString();
         });
       }
       cell.textContent = date.getDate();
@@ -314,38 +376,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         slot.classList.add("bg-primary", "text-white");
         selectedTime = slot.textContent;
+        // Update hidden time input
+        document.getElementById('time').value = slot.textContent;
       });
       timeSlotsContainer.appendChild(slot);
     }
-  }
-
-  // Form validation and submission handling
-  const bookingForm = document.getElementById("booking-form");
-  const formMessage = document.getElementById("form-message");
-
-  if (bookingForm) {
-    bookingForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      const formData = new FormData(bookingForm);
-      let allFieldsFilled = true;
-
-      for (let [name, value] of formData.entries()) {
-        if (!value) {
-          allFieldsFilled = false;
-          break;
-        }
-      }
-
-      if (allFieldsFilled && selectedDate && selectedTime) {
-        formData.append("date", selectedDate.toLocaleDateString());
-        formData.append("time", selectedTime);
-        formMessage.textContent = "Booking confirmed!";
-        formMessage.className = "text-green-500";
-      } else {
-        formMessage.textContent = "Please fill in all fields and select a date and time.";
-        formMessage.className = "text-red-500";
-      }
-    });
   }
 });
 
@@ -364,23 +399,4 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   }
-});
-const btn = document.getElementById('submit-booking');
-
-document.getElementById('booking-form').addEventListener('submit', function(event) {
-  event.preventDefault(); // Previne trimiterea automată a formularului
-
-  // Trimite emailul folosind EmailJS
-  emailjs.send("SERVICE_ID", "TEMPLATE_ID", {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      phone: document.getElementById('phone').value,
-      service: document.getElementById('service').value,
-      date: document.getElementById('date').value,
-      time: document.getElementById('time').value
-  }).then(function(response) {
-      alert('Formular trimis cu succes!', response.status, response.text);
-  }, function(error) {
-      alert('Eroare la trimitere!', error);
-  });
 });
