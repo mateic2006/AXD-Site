@@ -342,6 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let selectedTime = null;
 
   function generateWeek(startDate) {
+    
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     for (let i = 0; i < 7; i++) {
@@ -355,12 +356,12 @@ document.addEventListener("DOMContentLoaded", function () {
         cell.classList.add("bg-white", "text-gray-700", "hover:bg-primary", "hover:text-white");
         cell.addEventListener("click", function () {
           datePicker.querySelectorAll("div").forEach(el => {
-            el.classList.remove("bg-primary", "text-white", "ring-2", "ring-primary");
+            el.classList.remove("bg-primary","text-black", "ring-2", "ring-primary");
           });
           cell.classList.add("bg-primary", "text-black", "ring-2", "ring-primary");
           selectedDate = date;
           // Update hidden date input
-          document.getElementById('date').value = date.toLocaleDateString();
+          document.getElementById('date').value = date.toLocaleDateString("ro-RO");
         });
       }
       cell.textContent = date.getDate();
@@ -376,25 +377,29 @@ document.addEventListener("DOMContentLoaded", function () {
     generateWeek(nextMonday);
   }
 
-  if (datePicker) {
-    generateTwoWeeks();
-  }
+  // Global variable to track the timeout
+  let calendarUpdateTimeout = null;
 
-  // Schedule a weekly update at the upcoming Monday midnight
   function scheduleCalendarUpdate() {
     const now = new Date();
     const nextMonday = new Date(now);
     nextMonday.setDate(now.getDate() + ((8 - now.getDay()) % 7));
     nextMonday.setHours(0, 0, 0, 0);
     const timeout = nextMonday.getTime() - now.getTime();
-    setTimeout(() => {
+    
+    // Clear any existing timeout before creating a new one
+    if (calendarUpdateTimeout !== null) {
+      clearTimeout(calendarUpdateTimeout);
+    }
+    
+    calendarUpdateTimeout = setTimeout(() => {
       currentMonday = new Date(nextMonday);
       generateTwoWeeks();
-      scheduleCalendarUpdate();
     }, timeout);
   }
 
   if (datePicker) {
+    generateTwoWeeks();
     scheduleCalendarUpdate();
   }
 
