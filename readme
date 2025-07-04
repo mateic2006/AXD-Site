@@ -1,0 +1,56 @@
+# AXD Site
+
+This project is a web application designed to showcase a portfolio and provide a booking system for services. It includes features such as a portfolio slider, a calendar for selecting dates, and time slots for scheduling appointments.
+
+## Features
+
+### Portfolio Slider
+- Displays a slider for showcasing portfolio items.
+- Adjusts the number of visible slides based on screen width (1 slide for small screens, 3 slides for larger screens).
+
+### Booking System
+- **Date Picker**: Allows users to select a date from a dynamically generated two-week calendar.
+- **Time Slots**: Provides selectable time slots for scheduling appointments.
+- **Service Selection**: Automatically selects a service based on URL parameters.
+
+### Responsive Design
+- The application is designed to work seamlessly across different screen sizes.
+
+## How It Works
+
+1. **Portfolio Slider**:
+    - The slider functionality is initialized on page load.
+    - Navigation buttons allow users to scroll through the portfolio items.
+
+2. **Date Picker**:
+    - Generates a two-week calendar starting from the current Monday.
+    - Highlights the selected date and updates a hidden input field with the selected date.
+
+3. **Time Slots**:
+    - Displays available time slots from 5:00 AM to 8:00 PM.
+    - Highlights the selected time slot and updates a hidden input field with the selected time.
+
+4. **Service Selection**:
+    - Reads the `service` parameter from the URL and pre-selects the corresponding service in the dropdown menu.
+
+## File Structure
+
+- **`js/scripts.js`**: Contains all the JavaScript logic for the portfolio slider, date picker, time slots, and service selection.
+- **HTML and CSS**: (Not included in this document) Define the structure and styling of the application.
+
+## How to Use
+
+1. Clone the repository to your local machine.
+2. Open the project in your preferred code editor.
+3. Open the `index.html` file in a browser to view the application.
+4. Customize the content and styles as needed.
+
+## Future Improvements
+
+- Add more customization options for the portfolio slider.
+- Extend the calendar to support more than two weeks.
+- Implement backend integration for storing and managing bookings.
+
+## License
+
+This project is licensed under the MIT License. Feel free to use and modify it as needed.
