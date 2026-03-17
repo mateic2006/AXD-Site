@@ -12,26 +12,54 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     let visibleSlides = getVisibleSlides();
-    const totalImages = 20;
-    
-    // Create slides for all images
-    for (let i = 1; i <= totalImages; i++) {
+
+    // Portfolio media items: images and video with explicit filenames
+    const portfolioItems = [
+      { type: "image", src: "photos/fete/1.jpeg" },
+      { type: "video", src: "photos/fete/video1.MOV" },
+      { type: "image", src: "photos/fete/2.jpg" },
+      { type: "image", src: "photos/fete/5.jpeg" },
+      { type: "image", src: "photos/fete/7.jpeg" },
+      { type: "image", src: "photos/fete/9.jpeg" },
+      { type: "image", src: "photos/fete/10.jpeg" },
+      { type: "image", src: "photos/fete/11.jpeg" },
+      { type: "image", src: "photos/fete/12.jpeg" },
+      { type: "image", src: "photos/fete/14.jpeg" },
+      { type: "image", src: "photos/fete/15.jpeg" },
+      { type: "image", src: "photos/fete/16.jpeg" },
+    ];
+    const totalImages = portfolioItems.length;
+
+    // Create slides for all items
+    portfolioItems.forEach(function(item, index) {
       const slide = document.createElement("div");
       slide.className = "w-full md:w-1/3 flex-shrink-0 px-4";
-      slide.innerHTML = `
-        <div class="relative group aspect-square overflow-hidden rounded">
-          <img
-            src="photos/fete/${i}.jpeg"
-            alt="Portfolio ${i}"
-            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-          />
-          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-            <p class="text-white text-lg font-semibold"></p>
+      if (item.type === "video") {
+        slide.innerHTML = `
+          <div class="relative group aspect-square overflow-hidden rounded">
+            <video
+              src="${item.src}"
+              autoplay muted loop playsinline
+              class="w-full h-full object-cover"
+            ></video>
           </div>
-        </div>
-      `;
+        `;
+      } else {
+        slide.innerHTML = `
+          <div class="relative group aspect-square overflow-hidden rounded">
+            <img
+              src="${item.src}"
+              alt="Portfolio ${index + 1}"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <p class="text-white text-lg font-semibold"></p>
+            </div>
+          </div>
+        `;
+      }
       portfolioSlider.appendChild(slide.cloneNode(true));
-    }
+    });
 
     // Clone slides for infinite effect
     const originalSlides = Array.from(portfolioSlider.children);
@@ -296,6 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <a href="about.html" class="text-gray-700 hover:text-primary transition-colors">Despre mine</a>
             <a href="/index.html#services" class="text-gray-700 hover:text-primary transition-colors">Servicii</a>
             <a href="/index.html#portfolio" class="text-gray-700 hover:text-primary transition-colors">Portofoliu</a>
+            <a href="unghii.html" class="text-gray-700 hover:text-primary transition-colors">Unghii</a>
             <a href="contact.html" class="text-gray-700 hover:text-primary transition-colors">Contact</a>
           </div>
         </div>
@@ -429,14 +458,23 @@ document.addEventListener("DOMContentLoaded", function() {
   if (service) {
     const selectElem = document.querySelector('form select');
     if (selectElem) {
-      if (service.toLowerCase() === "bridal") {
-        selectElem.value = "Machiaj Mireasa";
-      } else if (service.toLowerCase() === "bridal-trial") {
-        selectElem.value = "Proba Mireasă";
-      } else if (service.toLowerCase() === "editorial") {
-        selectElem.value = "Machiaj de Seara";
-      } else if (service.toLowerCase() === "special") {
-        selectElem.value = "Machiaj Natural";
+      const serviceMap = {
+        "bridal": "Machiaj Mireasa",
+        "bridal-trial": "Proba Mireasă",
+        "editorial": "Machiaj de Seara",
+        "special": "Machiaj Natural",
+        "cofat-bucle": "Cofat Bucle",
+        "indreptat-par": "Îndreptat Păr",
+        "demontare-cuticule": "Demontare și Stilizare Cuticule",
+        "oja-semipermanenta": "Ojă Semi-permanentă",
+        "constructie-scurte": "Construcție Unghii Scurte",
+        "constructie-medii": "Construcție Unghii Medii",
+        "french-interior": "French de Interior",
+        "babyboomer": "Babyboomer"
+      };
+      const mapped = serviceMap[service.toLowerCase()];
+      if (mapped) {
+        selectElem.value = mapped;
       }
     }
   }

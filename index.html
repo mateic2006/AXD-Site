@@ -45,6 +45,11 @@
               >Portofoliu</a
             >
             <a
+              href="unghii.html"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >Unghii</a
+            >
+            <a
               href="contact.html"
               class="text-gray-700 hover:text-primary transition-colors"
               >Contact</a
@@ -95,82 +100,203 @@
         >
           Serviciile Noastre
         </h2>
-        <div class="grid md:grid-cols-4 gap-8">
-          <div class="bg-white p-8 rounded shadow-sm">
-            <div
-              class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6"
-            >
-              <i class="ri-brush-line text-primary text-2xl"></i>
-            </div>
-            <h3 class="text-xl font-semibold mb-4">Machiaj Mireasă</h3>
-            <p class="text-gray-600 mb-6">
+        <!-- Tab Buttons -->
+        <div class="flex justify-center gap-4 mb-12">
+          <button onclick="switchTab('machiaj')" id="tab-machiaj" class="service-tab px-8 py-3 rounded-full font-semibold transition-all duration-300 bg-primary text-white shadow-md cursor-pointer">
+            Machiaj
+          </button>
+          <button onclick="switchTab('par')" id="tab-par" class="service-tab px-8 py-3 rounded-full font-semibold transition-all duration-300 bg-white text-gray-700 hover:bg-primary/10 shadow-md cursor-pointer">
+            Păr
+          </button>
+          <button onclick="switchTab('unghii')" id="tab-unghii" class="service-tab px-8 py-3 rounded-full font-semibold transition-all duration-300 bg-white text-gray-700 hover:bg-primary/10 shadow-md cursor-pointer">
+            Unghii
+          </button>
+        </div>
+        <!-- Makeup Services -->
+        <div id="panel-machiaj" class="service-panel">
+          <div class="flex flex-wrap justify-center gap-8">
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-brush-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Machiaj Mireasă</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
                 Machiaj profesional pentru ziua nunții, perfect pentru a evidenția frumusețea naturală a miresei.
-            </p>
-            <p class="text-2xl font-['Playfair_Display'] mb-6">250 lei</p>
-            <button
-              onclick="window.location.href='contact.html?service=bridal'"
-              class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer"
-            >
-              Rezervă acum
-            </button>
-          </div>
-          <div class="bg-white p-8 rounded shadow-sm">
-            <div
-              class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6"
-            >
-              <i class="ri-brush-3-line text-primary text-2xl"></i>
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">250 lei</p>
+              <button onclick="window.location.href='contact.html?service=bridal'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
             </div>
-            <h3 class="text-xl font-semibold mb-4">Proba Mireasă</h3>
-            <p class="text-gray-600 mb-6">
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-brush-3-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Proba Mireasă</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
                 Machiaj de probă înaintea nunții pentru a stabili împreună look-ul perfect pentru ziua cea mare.
-            </p>
-            <p class="text-2xl font-['Playfair_Display'] mb-6">200 lei</p>
-            <button
-              onclick="window.location.href='contact.html?service=bridal-trial'"
-              class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer"
-            >
-              Rezervă acum
-            </button>
-          </div>
-          <div class="bg-white p-8 rounded shadow-sm">
-            <div
-              class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6"
-            >
-              <i class="ri-moon-line text-primary text-2xl"></i>
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">200 lei</p>
+              <button onclick="window.location.href='contact.html?service=bridal-trial'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
             </div>
-            <h3 class="text-xl font-semibold mb-4">Machiaj de Seară</h3>
-            <p class="text-gray-600 mb-6">
-              Este perfect pentru evenimentele voastre speciale, aducând un plus de strălucire și eleganță.
-            </p>
-            <p class="text-2xl font-['Playfair_Display'] mb-6">180 lei</p>
-            <button
-              onclick="window.location.href='contact.html?service=editorial'"
-              class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer"
-            >
-              Rezervă acum
-            </button>
-          </div>
-          <div class="bg-white p-8 rounded shadow-sm">
-            <div
-              class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6"
-            >
-              <i class="ri-flower-line text-primary text-2xl"></i>
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-moon-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Machiaj de Seară</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Este perfect pentru evenimentele voastre speciale, aducând un plus de strălucire și eleganță.
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">180 lei</p>
+              <button onclick="window.location.href='contact.html?service=editorial'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
             </div>
-            <h3 class="text-xl font-semibold mb-4">Machiaj Natural</h3>
-            <p class="text-gray-600 mb-6 ">
-                  Machiajul natural pune în valoare trăsăturile tale fără a le încărca.
-                  <br />
-                  (Nu include gene)
-            </p>
-            <p class="text-2xl font-['Playfair_Display'] mb-6">160 lei</p>
-            <button
-              onclick="window.location.href='contact.html?service=special'"
-              class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer"
-            >
-              Rezervă acum
-            </button>
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-flower-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Machiaj Natural</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Machiajul natural pune în valoare trăsăturile tale fără a le încărca.
+                <br />(Nu include gene)
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">160 lei</p>
+              <button onclick="window.location.href='contact.html?service=special'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
+            </div>
           </div>
         </div>
+        <!-- Hair Services -->
+        <div id="panel-par" class="service-panel hidden">
+          <div class="flex flex-wrap justify-center gap-8">
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-scissors-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Cofat Bucle</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Coafură profesională cu bucle elegante, perfectă pentru orice eveniment special.
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">135 lei</p>
+              <button onclick="window.location.href='contact.html?service=cofat-bucle'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
+            </div>
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-contrast-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Îndreptat Păr</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Îndreptare profesională pentru un păr neted, mătăsos și strălucitor.
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">100 lei</p>
+              <button onclick="window.location.href='contact.html?service=indreptat-par'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Nail Services -->
+        <div id="panel-unghii" class="service-panel hidden">
+          <div class="flex flex-wrap justify-center gap-8">
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-hand-heart-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Demontare și Stilizare Cuticule</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Îngrijire profesională a cuticulelor pentru unghii sănătoase și îngrijite.
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">35 lei</p>
+              <button onclick="window.location.href='contact.html?service=demontare-cuticule'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
+            </div>
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-paint-brush-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Ojă Semi-permanentă</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Ojă semi-permanentă cu sau fără apex, pentru unghii rezistente și frumoase.
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">60 lei</p>
+              <button onclick="window.location.href='contact.html?service=oja-semipermanenta'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
+            </div>
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-shape-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Construcție Unghii Scurte</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Construcție gel pentru unghii scurte, rezistente și cu aspect natural.
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">120 lei</p>
+              <button onclick="window.location.href='contact.html?service=constructie-scurte'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
+            </div>
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-shape-2-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Construcție Unghii Medii</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Construcție gel pentru unghii medii, perfecte pentru un look elegant.
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">140 lei</p>
+              <button onclick="window.location.href='contact.html?service=constructie-medii'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
+            </div>
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-palette-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">French de Interior</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Design french de interior, adaugă un plus de eleganță unghiilor tale.
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">+50 lei</p>
+              <button onclick="window.location.href='contact.html?service=french-interior'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
+            </div>
+            <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+              <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+                <i class="ri-magic-line text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Babyboomer</h3>
+              <p class="text-gray-600 mb-6 flex-grow">
+                Efect babyboomer delicat, pentru un look natural și sofisticat.
+              </p>
+              <p class="text-2xl font-['Playfair_Display'] mb-6">+25 lei</p>
+              <button onclick="window.location.href='contact.html?service=babyboomer'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+                Rezervă acum
+              </button>
+            </div>
+          </div>
+        </div>
+        <script>
+          function switchTab(tab) {
+            document.querySelectorAll('.service-panel').forEach(function(p) { p.classList.add('hidden'); });
+            document.querySelectorAll('.service-tab').forEach(function(b) {
+              b.classList.remove('bg-primary', 'text-white', 'shadow-md');
+              b.classList.add('bg-white', 'text-gray-700');
+            });
+            document.getElementById('panel-' + tab).classList.remove('hidden');
+            var btn = document.getElementById('tab-' + tab);
+            btn.classList.remove('bg-white', 'text-gray-700');
+            btn.classList.add('bg-primary', 'text-white', 'shadow-md');
+          }
+        </script>
       </div>
     </section>
     <section id="portfolio" class="py-24">
@@ -385,6 +511,13 @@
               </li>
               <li>
                 <a
+                  href="unghii.html"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Unghii</a
+                >
+              </li>
+              <li>
+                <a
                   href="contact.html"
                   class="text-gray-400 hover:text-white transition-colors"
                   >Contact</a
@@ -400,12 +533,16 @@
                 Tiglina 1, Galați
               </li>
               <li class="flex items-center">
-                <i class="ri-phone-line mr-2"></i>
-                +40 771 581 468
+                <a href="tel:+40746644653" class="hover:text-white transition-colors flex items-center">
+                  <i class="ri-phone-line mr-2"></i>
+                  +40 746 644 653
+                </a>
               </li>
               <li class="flex items-center">
-                <i class="ri-mail-line mr-2"></i>
-                andreeadraghici0000@gmail.com
+                <a href="mailto:contact@axdmakeup.ro" class="hover:text-white transition-colors flex items-center">
+                  <i class="ri-mail-line mr-2"></i>
+                  contact@axdmakeup.ro
+                </a>
               </li>
             </ul>
           </div>
@@ -413,7 +550,7 @@
             <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
             <div class="flex space-x-4">
               <a
-                href="https://www.instagram.com/andreeaaxd.makeupartist/"
+                href="https://www.instagram.com/andreeaaxd.makeupandnailartist/"
                 class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors"
               >
                 <i class="ri-instagram-line"></i>
@@ -425,7 +562,7 @@
                 <i class="ri-facebook-line"></i>
               </a>
               <a
-                href="https://www.tiktok.com/@andreea.axd.makeupartist?_t=ZN-8ulXqqAytxm&_r=1"
+                href="https://www.tiktok.com/@andreeaaxdmakeupnailart"
                 class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors"
               >
                 <i class="ri-tiktok-line"></i>
@@ -436,7 +573,7 @@
         <div
           class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400"
         >
-          <p>&copy; 2025 AndreeaAXD Makeup Studio. Toate drepturile rezervate.</p>
+          <p>&copy;2026 AndreeaAXD Beauty Studio. Toate drepturile rezervate.</p>
         </div>
       </div>
     </footer>

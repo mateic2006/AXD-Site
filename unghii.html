@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unghii - AXD Makeup Studio</title>
+    <link rel="icon" href="/photos/light-logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/tailwind-config-portfolio.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="bg-white font-['Poppins']">
+    <nav class="fixed w-full bg-white/80 backdrop-blur-md z-50 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="index.html" class="h-16 flex items-center">
+            <img
+              src="photos/light-logo.png"
+              alt="logo"
+              class="h-16"
+            />
+          </a>
+          <div class="hidden md:flex space-x-8">
+            <a
+              href="about.html"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >Despre mine</a
+            >
+            <a
+              href="index.html#services"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >Servicii</a
+            >
+            <a
+              href="index.html#portfolio"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >Portofoliu</a
+            >
+            <a
+              href="unghii.html"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >Unghii</a
+            >
+            <a
+              href="contact.html"
+              class="text-gray-700 hover:text-primary transition-colors"
+              >Contact</a
+            >
+          </div>
+          <button class="md:hidden w-10 h-10 flex items-center justify-center">
+            <i class="ri-menu-line text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <header class="relative pt-16">
+      <div class="absolute inset-0 bg bg-cover bg-center">
+        <img
+          src="photos/bg2-photo.jpg"
+          alt="Background Photo"
+          class="w-full h-full object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-white/90 to-white/50"
+        ></div>
+      </div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <div class="max-w-2xl">
+          <h1
+            class="font-['Playfair_Display'] text-5xl font-bold text-gray-900 mb-6"
+          >
+            Servicii Unghii
+          </h1>
+          <p class="text-lg text-gray-600 mb-8">
+            Descoperă serviciile noastre profesionale de manichiură. De la ojă semi-permanentă la construcție gel, îți oferim unghii impecabile pentru orice ocazie.
+          </p>
+          <button
+            onclick="window.location.href='contact.html'"
+            class="bg-primary text-white px-8 py-3 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer"
+          >
+            Programează-te
+          </button>
+        </div>
+      </div>
+    </header>
+    <!-- Gallery Section -->
+    <section class="py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2
+          class="font-['Playfair_Display'] text-4xl font-bold text-center mb-16"
+        >
+          Galerie Unghii
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="relative group overflow-hidden rounded-lg shadow-lg">
+            <img
+              src="photos/fete/unghii1.JPEG"
+              alt="Unghii 1"
+              class="w-full h-96 object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+          <div class="relative group overflow-hidden rounded-lg shadow-lg">
+            <img
+              src="photos/fete/unghii2.JPEG"
+              alt="Unghii 2"
+              class="w-full h-96 object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+          <div class="relative group overflow-hidden rounded-lg shadow-lg">
+            <img
+              src="photos/fete/unghii3.JPG"
+              alt="Unghii 3"
+              class="w-full h-96 object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+          <div class="relative group overflow-hidden rounded-lg shadow-lg">
+            <img
+              src="photos/fete/unghii4.JPEG"
+              alt="Unghii 4"
+              class="w-full h-96 object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Pricing Section -->
+    <section class="py-24 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2
+          class="font-['Playfair_Display'] text-4xl font-bold text-center mb-16"
+        >
+          Prețuri Unghii
+        </h2>
+        <div class="flex flex-wrap justify-center gap-8">
+          <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+            <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+              <i class="ri-hand-heart-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-4">Demontare și Stilizare Cuticule</h3>
+            <p class="text-gray-600 mb-6 flex-grow">
+              Îngrijire profesională a cuticulelor pentru unghii sănătoase și îngrijite.
+            </p>
+            <p class="text-2xl font-['Playfair_Display'] mb-6">35 lei</p>
+            <button onclick="window.location.href='contact.html?service=demontare-cuticule'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+              Rezervă acum
+            </button>
+          </div>
+          <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+            <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+              <i class="ri-paint-brush-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-4">Ojă Semi-permanentă</h3>
+            <p class="text-gray-600 mb-6 flex-grow">
+              Ojă semi-permanentă cu sau fără apex, pentru unghii rezistente și frumoase.
+            </p>
+            <p class="text-2xl font-['Playfair_Display'] mb-6">60 lei</p>
+            <button onclick="window.location.href='contact.html?service=oja-semipermanenta'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+              Rezervă acum
+            </button>
+          </div>
+          <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+            <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+              <i class="ri-shape-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-4">Construcție Unghii Scurte</h3>
+            <p class="text-gray-600 mb-6 flex-grow">
+              Construcție gel pentru unghii scurte, rezistente și cu aspect natural.
+            </p>
+            <p class="text-2xl font-['Playfair_Display'] mb-6">120 lei</p>
+            <button onclick="window.location.href='contact.html?service=constructie-scurte'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+              Rezervă acum
+            </button>
+          </div>
+          <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+            <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+              <i class="ri-shape-2-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-4">Construcție Unghii Medii</h3>
+            <p class="text-gray-600 mb-6 flex-grow">
+              Construcție gel pentru unghii medii, perfecte pentru un look elegant.
+            </p>
+            <p class="text-2xl font-['Playfair_Display'] mb-6">140 lei</p>
+            <button onclick="window.location.href='contact.html?service=constructie-medii'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+              Rezervă acum
+            </button>
+          </div>
+          <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+            <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+              <i class="ri-palette-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-4">French de Interior</h3>
+            <p class="text-gray-600 mb-6 flex-grow">
+              Design french de interior, adaugă un plus de eleganță unghiilor tale.
+            </p>
+            <p class="text-2xl font-['Playfair_Display'] mb-6">+50 lei</p>
+            <button onclick="window.location.href='contact.html?service=french-interior'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+              Rezervă acum
+            </button>
+          </div>
+          <div class="bg-white p-8 rounded shadow-sm w-full md:w-[calc(33.333%-1.5rem)] max-w-sm flex flex-col">
+            <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-6">
+              <i class="ri-magic-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-4">Babyboomer</h3>
+            <p class="text-gray-600 mb-6 flex-grow">
+              Efect babyboomer delicat, pentru un look natural și sofisticat.
+            </p>
+            <p class="text-2xl font-['Playfair_Display'] mb-6">+25 lei</p>
+            <button onclick="window.location.href='contact.html?service=babyboomer'" class="w-full bg-primary text-white py-2 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer">
+              Rezervă acum
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="bg-gray-900 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div>
+            <img
+              src="photos/dark-logo.png"
+              alt="logo"
+              class="h-14 mb-6 mix-blend-screen"
+            />
+            <p class="text-gray-400">
+              Servicii profesionale de machiaj pentru toate ocaziile.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Legături rapide</h4>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="about.html"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Despre mine</a
+                >
+              </li>
+              <li>
+                <a
+                  href="index.html#services"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Servicii</a
+                >
+              </li>
+              <li>
+                <a
+                  href="index.html#portfolio"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Portofoliu</a
+                >
+              </li>
+              <li>
+                <a
+                  href="unghii.html"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Unghii</a
+                >
+              </li>
+              <li>
+                <a
+                  href="contact.html"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Contact</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Contact</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li class="flex items-center">
+                <i class="ri-map-pin-line mr-2"></i>
+                Tiglina 1, Galați
+              </li>
+              <li class="flex items-center">
+                <a href="tel:+40746644653" class="hover:text-white transition-colors flex items-center">
+                  <i class="ri-phone-line mr-2"></i>
+                  +40 746 644 653
+                </a>
+              </li>
+              <li class="flex items-center">
+                <a href="mailto:contact@axdmakeup.ro" class="hover:text-white transition-colors flex items-center">
+                  <i class="ri-mail-line mr-2"></i>
+                  contact@axdmakeup.ro
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+            <div class="flex space-x-4">
+              <a
+                href="https://www.instagram.com/andreeaaxd.makeupandnailartist/"
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors"
+              >
+                <i class="ri-instagram-line"></i>
+              </a>
+              <a
+                href="https://www.facebook.com/makeup.artist.makeup"
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors"
+              >
+                <i class="ri-facebook-line"></i>
+              </a>
+              <a
+                href="https://www.tiktok.com/@andreeaaxdmakeupnailart"
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-primary transition-colors"
+              >
+                <i class="ri-tiktok-line"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400"
+        >
+          <p>&copy;2026 AndreeaAXD Beauty Studio. Toate drepturile rezervate.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="js/scripts.js" defer></script>
+  </body>
+</html>
