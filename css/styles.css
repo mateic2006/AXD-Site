@@ -15,19 +15,24 @@ body {
 .testimonial-slider {
   transition: transform 0.3s ease-in-out;
 }
-.date-picker-cell {
-  transition: all 0.2s ease;
+
+/* Interactive calendar */
+.calendar-grid {
+  animation: calendarFade 0.35s ease;
 }
-.date-picker-cell:hover:not(.disabled) {
-  background-color: #c292fc;
-  color: white;
+@keyframes calendarFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.time-slot {
-  transition: all 0.2s ease;
+#date-picker button:focus-visible,
+#time-slots button:focus-visible {
+  outline: 2px solid #C292FC;
+  outline-offset: 2px;
 }
-.time-slot:hover:not(.disabled) {
-  background-color: #c292fc;
-  color: white;
+#prev-month:focus-visible,
+#next-month:focus-visible {
+  outline: 2px solid #C292FC;
+  outline-offset: 2px;
 }
 
 /* Slider Styles */

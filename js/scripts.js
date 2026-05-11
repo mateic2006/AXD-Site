@@ -359,95 +359,153 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Date-picker and Time-slot generation for contact.html
+  // Interactive monthly calendar for contact.html
   const datePicker = document.getElementById("date-picker");
-  // Calculate the Monday of the current week (week containing today's date)
-  const today = new Date();
-  const dayOfWeek = today.getDay();
-  let currentMonday = new Date(today);
-  currentMonday.setDate(today.getDate() - ((dayOfWeek === 0 ? 7 : dayOfWeek) - 1));
-
-  let selectedDate = null;
-  let selectedTime = null;
-
-  function generateWeek(startDate) {
-    
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i);
-      const cell = document.createElement("div");
-      cell.className = "py-2 rounded text-center cursor-pointer transition-colors";
-      if (date.getTime() < now.getTime()) {
-        cell.classList.add("bg-gray-300", "text-gray-500", "cursor-not-allowed");
-      } else {
-        cell.classList.add("bg-white", "text-gray-700", "hover:bg-primary", "hover:text-white");
-        cell.addEventListener("click", function () {
-          datePicker.querySelectorAll("div").forEach(el => {
-            el.classList.remove("bg-primary","text-black", "ring-2", "ring-primary");
-          });
-          cell.classList.add("bg-primary", "text-black", "ring-2", "ring-primary");
-          selectedDate = date;
-          // Update hidden date input
-          document.getElementById('date').value = date.toLocaleDateString("ro-RO");
-        });
-      }
-      cell.textContent = date.getDate();
-      datePicker.appendChild(cell);
-    }
-  }
-
-  function generateTwoWeeks() {
-    datePicker.innerHTML = "";
-    generateWeek(currentMonday);
-    const nextMonday = new Date(currentMonday);
-    nextMonday.setDate(currentMonday.getDate() + 7);
-    generateWeek(nextMonday);
-  }
-
-  // Global variable to track the timeout
-  let calendarUpdateTimeout = null;
-
-  function scheduleCalendarUpdate() {
-    const now = new Date();
-    const nextMonday = new Date(now);
-    nextMonday.setDate(now.getDate() + ((8 - now.getDay()) % 7));
-    nextMonday.setHours(0, 0, 0, 0);
-    const timeout = nextMonday.getTime() - now.getTime();
-    
-    // Clear any existing timeout before creating a new one
-    if (calendarUpdateTimeout !== null) {
-      clearTimeout(calendarUpdateTimeout);
-    }
-    
-    calendarUpdateTimeout = setTimeout(() => {
-      currentMonday = new Date(nextMonday);
-      generateTwoWeeks();
-    }, timeout);
-  }
-
   if (datePicker) {
-    generateTwoWeeks();
-    scheduleCalendarUpdate();
-  }
+    const monthYearEl = document.getElementById("month-year");
+    const prevMonthBtn = document.getElementById("prev-month");
+    const nextMonthBtn = document.getElementById("next-month");
+    const bookingSummary = document.getElementById("booking-summary");
+    const summaryDateEl = document.getElementById("summary-date");
+    const summaryTimeWrap = document.getElementById("summary-time-wrap");
+    const summaryTimeEl = document.getElementById("summary-time");
+    const timeSlotsHint = document.getElementById("time-slots-hint");
+    const dateInput = document.getElementById("date");
+    const timeInput = document.getElementById("time");
 
-  const timeSlotsContainer = document.getElementById("time-slots");
-  if (timeSlotsContainer) {
-    for (let hour = 5; hour <= 20; hour++) {
-      const slot = document.createElement("div");
-      slot.className = "py-2 rounded text-center cursor-pointer border hover:bg-primary hover:text-white transition-colors";
-      slot.textContent = hour + ":00";
-      slot.addEventListener("click", function () {
-        timeSlotsContainer.querySelectorAll("div").forEach(el => {
-          el.classList.remove("bg-primary", "text-white");
+    const monthNames = ["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"];
+    const dayNamesFull = ["Duminică","Luni","Marți","Miercuri","Joi","Vineri","Sâmbătă"];
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let viewMonth = today.getMonth();
+    let viewYear = today.getFullYear();
+    let selectedDate = null;
+    let selectedTime = null;
+
+    function formatDateLong(d) {
+      return `${dayNamesFull[d.getDay()]}, ${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+    }
+
+    function updateSummary() {
+      if (selectedDate) {
+        summaryDateEl.textContent = formatDateLong(selectedDate);
+        bookingSummary.classList.remove("hidden");
+        if (selectedTime) {
+          summaryTimeEl.textContent = selectedTime;
+          summaryTimeWrap.classList.remove("hidden");
+        } else {
+          summaryTimeWrap.classList.add("hidden");
+        }
+      } else {
+        bookingSummary.classList.add("hidden");
+      }
+    }
+
+    function updateNavButtons() {
+      const atCurrentMonth = (viewYear === today.getFullYear() && viewMonth === today.getMonth());
+      prevMonthBtn.disabled = atCurrentMonth;
+    }
+
+    function renderCalendar() {
+      datePicker.innerHTML = "";
+      monthYearEl.textContent = `${monthNames[viewMonth]} ${viewYear}`;
+      updateNavButtons();
+
+      const firstOfMonth = new Date(viewYear, viewMonth, 1);
+      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+      // Monday-first offset: Sunday(0) -> 6, Monday(1) -> 0
+      const startOffset = (firstOfMonth.getDay() + 6) % 7;
+
+      for (let i = 0; i < startOffset; i++) {
+        const empty = document.createElement("div");
+        empty.className = "aspect-square";
+        datePicker.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(viewYear, viewMonth, day);
+        date.setHours(0, 0, 0, 0);
+
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.textContent = day;
+
+        const isPast = date.getTime() < today.getTime();
+        const isToday = date.getTime() === today.getTime();
+        const isSelected = selectedDate && date.getTime() === selectedDate.getTime();
+
+        cell.className = "aspect-square flex items-center justify-center text-sm rounded-full transition-all duration-200 select-none";
+
+        if (isPast) {
+          cell.classList.add("text-gray-300", "cursor-not-allowed");
+          cell.disabled = true;
+        } else if (isSelected) {
+          cell.classList.add("bg-gradient-to-br","from-primary","to-secondary","text-white","font-bold","shadow-lg","scale-105");
+          if (isToday) {
+            cell.classList.add("ring-2","ring-primary/40","ring-offset-1");
+          }
+        } else {
+          cell.classList.add("text-gray-700","hover:bg-secondary/40","hover:text-primary","hover:scale-105","font-medium","cursor-pointer");
+          if (isToday) {
+            cell.classList.add("ring-2","ring-primary/40","text-primary","font-bold");
+          }
+          cell.addEventListener("click", function () {
+            selectedDate = date;
+            dateInput.value = formatDateLong(date);
+            updateSummary();
+            renderCalendar();
+            if (timeSlotsHint) timeSlotsHint.classList.add("hidden");
+          });
+        }
+
+        datePicker.appendChild(cell);
+      }
+
+      // Replay grid animation
+      datePicker.classList.remove("calendar-grid");
+      void datePicker.offsetWidth;
+      datePicker.classList.add("calendar-grid");
+    }
+
+    prevMonthBtn.addEventListener("click", function () {
+      if (viewYear === today.getFullYear() && viewMonth === today.getMonth()) return;
+      viewMonth--;
+      if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+      renderCalendar();
+    });
+
+    nextMonthBtn.addEventListener("click", function () {
+      viewMonth++;
+      if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+      renderCalendar();
+    });
+
+    renderCalendar();
+
+    // Time slots
+    const timeSlotsContainer = document.getElementById("time-slots");
+    if (timeSlotsContainer) {
+      for (let hour = 9; hour <= 20; hour++) {
+        const slot = document.createElement("button");
+        slot.type = "button";
+        const label = (hour < 10 ? "0" + hour : hour) + ":00";
+        slot.textContent = label;
+        slot.className = "py-2.5 px-2 rounded-full text-sm border border-gray-200 text-gray-700 font-medium hover:border-primary hover:bg-primary hover:text-white transition-all duration-200 cursor-pointer";
+        slot.addEventListener("click", function () {
+          timeSlotsContainer.querySelectorAll("button").forEach(el => {
+            el.classList.remove("bg-primary","text-white","border-primary","shadow-md","scale-105");
+            el.classList.add("border-gray-200","text-gray-700");
+          });
+          slot.classList.remove("border-gray-200","text-gray-700");
+          slot.classList.add("bg-primary","text-white","border-primary","shadow-md","scale-105");
+          selectedTime = label;
+          timeInput.value = label;
+          updateSummary();
         });
-        slot.classList.add("bg-primary", "text-white");
-        selectedTime = slot.textContent;
-        // Update hidden time input
-        document.getElementById('time').value = slot.textContent;
-      });
-      timeSlotsContainer.appendChild(slot);
+        timeSlotsContainer.appendChild(slot);
+      }
     }
   }
 });
