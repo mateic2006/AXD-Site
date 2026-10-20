@@ -322,8 +322,8 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
           <div class="flex flex-col space-y-4">
             <a href="about.html" class="text-gray-700 hover:text-primary transition-colors">Despre mine</a>
-            <a href="/index.html#services" class="text-gray-700 hover:text-primary transition-colors">Servicii</a>
-            <a href="/index.html#portfolio" class="text-gray-700 hover:text-primary transition-colors">Portofoliu</a>
+            <a href="/#services" class="text-gray-700 hover:text-primary transition-colors">Servicii</a>
+            <a href="/#portfolio" class="text-gray-700 hover:text-primary transition-colors">Portofoliu</a>
             <a href="unghii.html" class="text-gray-700 hover:text-primary transition-colors">Unghii</a>
             <a href="contact.html" class="text-gray-700 hover:text-primary transition-colors">Contact</a>
           </div>
