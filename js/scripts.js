@@ -451,15 +451,19 @@ document.addEventListener("DOMContentLoaded", function () {
         cell.type = "button";
         cell.textContent = day;
 
-        const isPast = date.getTime() < today.getTime() || isDayFull(date);
+        const isUnavailable = date.getTime() < today.getTime() || isDayFull(date);
         const isToday = date.getTime() === today.getTime();
         const isSelected = selectedDate && date.getTime() === selectedDate.getTime();
 
         cell.className = "aspect-square flex items-center justify-center text-sm rounded-full transition-all duration-200 select-none";
 
-        if (isPast) {
+        if (isUnavailable) {
           cell.classList.add("text-gray-300", "cursor-not-allowed");
           cell.disabled = true;
+          // Ziua de azi rămâne încercuită ca punct de referință, chiar dacă nu mai are ore libere
+          if (isToday) {
+            cell.classList.add("ring-2","ring-primary/40");
+          }
         } else if (isSelected) {
           cell.classList.add("bg-gradient-to-br","from-primary","to-secondary","text-white","font-bold","shadow-lg","scale-105");
           if (isToday) {
