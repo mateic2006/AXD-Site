@@ -1,6 +1,6 @@
 // URL-ul Web App-ului Google Apps Script.
 // Dacă e gol, site-ul trimite programările doar pe email (EmailJS).
-const BOOKING_API_URL = "";
+const BOOKING_API_URL = "https://script.google.com/macros/s/AKfycbzPp7eb8zpRr4aPeWO4xeFTU-GpdsA6K0b3XD6jg3IJswZGBYvNAk5UYqlVpqcD2b8i/exec";
 // Cheia publică (site key) Cloudflare Turnstile. Dacă e goală, CAPTCHA nu apare.
 const TURNSTILE_SITE_KEY = "0x4AAAAAAFd3PILitw_vY-Rj";
 
