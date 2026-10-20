@@ -62,35 +62,59 @@ function handleEmailSubmission(event) {
   setSubmitLoading(true);
   showFormMessage(messageEl, "", "");
 
-  emailjs.send("default_service", "template_lzorz2u", {
-    name: name,
-    email: email,
-    phone: phone,
-    service: service,
-    date: date,
-    time: time,
-    message: message || "—"
+  const apiEnabled = typeof BookingApi !== "undefined" && BookingApi.enabled();
+  const picker = window.bookingPicker;
+  const honeypot = form.querySelector('#website');
+
+  // 1. Rezervă ora în Google Calendar (sursa de adevăr pentru disponibilitate)
+  const reserve = apiEnabled
+    ? BookingApi.book({
+        name: name,
+        email: email,
+        phone: phone,
+        service: service,
+        date: form.querySelector('#date').dataset.iso,
+        time: time,
+        message: message,
+        website: honeypot ? honeypot.value : "",
+        elapsed: BookingApi.elapsedMs(),
+        captcha: BookingApi.captchaToken()
+      }).then(function (res) {
+        if (!res || !res.ok) {
+          throw { text: (res && res.error) || "Te rugăm să încerci din nou.", slotTaken: res && res.code === "slot_taken" };
+        }
+      })
+    : Promise.resolve();
+
+  // 2. Email de confirmare; dacă rezervarea a reușit deja, un email eșuat nu o anulează
+  reserve.then(function () {
+    return emailjs.send("default_service", "template_lzorz2u", {
+      name: name,
+      email: email,
+      phone: phone,
+      service: service,
+      date: date,
+      time: time,
+      message: message || "—"
+    }).catch(function (error) {
+      if (!apiEnabled) throw error;
+    });
+  }).finally(function () {
+    // un token Turnstile e valabil o singură dată
+    if (apiEnabled) BookingApi.resetCaptcha();
   }).then(function () {
     setSubmitLoading(false);
     showFormMessage(messageEl, "Programarea a fost trimisă cu succes! Te vom contacta în curând.", "success");
     form.reset();
-    // Reset hidden inputs and visible summary
-    form.querySelector('#date').value = "";
-    form.querySelector('#time').value = "";
-    const summary = document.getElementById("booking-summary");
-    if (summary) summary.classList.add("hidden");
-    // Clear selected states in calendar/time slots
-    document.querySelectorAll('#date-picker button').forEach(el => {
-      el.classList.remove("bg-gradient-to-br","from-primary","to-secondary","text-white","font-bold","shadow-lg","scale-105");
-    });
-    document.querySelectorAll('#time-slots button').forEach(el => {
-      el.classList.remove("bg-primary","text-white","border-primary","shadow-md","scale-105");
-      el.classList.add("border-gray-200","text-gray-700");
-    });
+    if (picker) {
+      picker.reset();
+      picker.refresh();
+    }
   }, function (error) {
     setSubmitLoading(false);
     const errMsg = (error && (error.text || error.message)) ? (error.text || error.message) : "Te rugăm să încerci din nou.";
     showFormMessage(messageEl, "Eroare la trimitere: " + errMsg, "error");
+    if (error && error.slotTaken && picker) picker.refresh();
   });
 }
 
@@ -98,5 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const bookingForm = document.getElementById('booking-form');
   if (bookingForm) {
     bookingForm.addEventListener('submit', handleEmailSubmission);
+    if (typeof BookingApi !== "undefined" && BookingApi.enabled()) BookingApi.initCaptcha("booking-captcha");
   }
 });

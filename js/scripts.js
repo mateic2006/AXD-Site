@@ -383,6 +383,25 @@ document.addEventListener("DOMContentLoaded", function () {
     let viewYear = today.getFullYear();
     let selectedDate = null;
     let selectedTime = null;
+    // { "YYYY-MM-DD": ["17:00", ...] } - ore ocupate, din Google Calendar
+    let busyByDate = {};
+
+    const SLOT_LABELS = [];
+    for (let hour = 9; hour <= 20; hour++) {
+      SLOT_LABELS.push((hour < 10 ? "0" + hour : hour) + ":00");
+    }
+
+    function isSlotUnavailable(date, label) {
+      const busy = busyByDate[toIsoDate(date)] || [];
+      if (busy.includes(label)) return true;
+      const slotStart = new Date(date);
+      slotStart.setHours(parseInt(label, 10), 0, 0, 0);
+      return slotStart.getTime() <= Date.now();
+    }
+
+    function isDayFull(date) {
+      return SLOT_LABELS.every(label => isSlotUnavailable(date, label));
+    }
 
     function formatDateLong(d) {
       return `${dayNamesFull[d.getDay()]}, ${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
@@ -432,7 +451,7 @@ document.addEventListener("DOMContentLoaded", function () {
         cell.type = "button";
         cell.textContent = day;
 
-        const isPast = date.getTime() < today.getTime();
+        const isPast = date.getTime() < today.getTime() || isDayFull(date);
         const isToday = date.getTime() === today.getTime();
         const isSelected = selectedDate && date.getTime() === selectedDate.getTime();
 
@@ -454,8 +473,14 @@ document.addEventListener("DOMContentLoaded", function () {
           cell.addEventListener("click", function () {
             selectedDate = date;
             dateInput.value = formatDateLong(date);
+            dateInput.dataset.iso = toIsoDate(date);
+            if (selectedTime && isSlotUnavailable(date, selectedTime)) {
+              selectedTime = null;
+              timeInput.value = "";
+            }
             updateSummary();
             renderCalendar();
+            renderTimeSlots();
             if (timeSlotsHint) timeSlotsHint.classList.add("hidden");
           });
         }
@@ -474,39 +499,89 @@ document.addEventListener("DOMContentLoaded", function () {
       viewMonth--;
       if (viewMonth < 0) { viewMonth = 11; viewYear--; }
       renderCalendar();
+      loadAvailability();
     });
 
     nextMonthBtn.addEventListener("click", function () {
       viewMonth++;
       if (viewMonth > 11) { viewMonth = 0; viewYear++; }
       renderCalendar();
+      loadAvailability();
     });
-
-    renderCalendar();
 
     // Time slots
     const timeSlotsContainer = document.getElementById("time-slots");
-    if (timeSlotsContainer) {
-      for (let hour = 9; hour <= 20; hour++) {
+
+    function renderTimeSlots() {
+      if (!timeSlotsContainer) return;
+      timeSlotsContainer.innerHTML = "";
+      SLOT_LABELS.forEach(label => {
         const slot = document.createElement("button");
         slot.type = "button";
-        const label = (hour < 10 ? "0" + hour : hour) + ":00";
         slot.textContent = label;
-        slot.className = "py-2.5 px-2 rounded-full text-sm border border-gray-200 text-gray-700 font-medium hover:border-primary hover:bg-primary hover:text-white transition-all duration-200 cursor-pointer";
-        slot.addEventListener("click", function () {
-          timeSlotsContainer.querySelectorAll("button").forEach(el => {
-            el.classList.remove("bg-primary","text-white","border-primary","shadow-md","scale-105");
-            el.classList.add("border-gray-200","text-gray-700");
-          });
-          slot.classList.remove("border-gray-200","text-gray-700");
+        slot.className = "py-2.5 px-2 rounded-full text-sm border font-medium transition-all duration-200";
+
+        if (selectedDate && isSlotUnavailable(selectedDate, label)) {
+          slot.disabled = true;
+          slot.title = "Indisponibil";
+          slot.classList.add("border-gray-100","text-gray-300","line-through","cursor-not-allowed");
+        } else if (label === selectedTime) {
           slot.classList.add("bg-primary","text-white","border-primary","shadow-md","scale-105");
+        } else {
+          slot.classList.add("border-gray-200","text-gray-700","hover:border-primary","hover:bg-primary","hover:text-white","cursor-pointer");
+        }
+
+        slot.addEventListener("click", function () {
           selectedTime = label;
           timeInput.value = label;
           updateSummary();
+          renderTimeSlots();
         });
         timeSlotsContainer.appendChild(slot);
-      }
+      });
     }
+
+    function loadAvailability() {
+      if (typeof BookingApi === "undefined" || !BookingApi.enabled()) return Promise.resolve();
+      const monthStart = new Date(viewYear, viewMonth, 1);
+      const from = monthStart < today ? today : monthStart;
+      const to = new Date(viewYear, viewMonth + 1, 0);
+      return BookingApi.fetchBusy(toIsoDate(from), toIsoDate(to)).then(busy => {
+        Object.assign(busyByDate, busy);
+        if (selectedDate && selectedTime && isSlotUnavailable(selectedDate, selectedTime)) {
+          selectedTime = null;
+          timeInput.value = "";
+          updateSummary();
+        }
+        renderCalendar();
+        renderTimeSlots();
+      });
+    }
+
+    function resetPicker() {
+      selectedDate = null;
+      selectedTime = null;
+      dateInput.value = "";
+      delete dateInput.dataset.iso;
+      timeInput.value = "";
+      updateSummary();
+      renderCalendar();
+      renderTimeSlots();
+      if (timeSlotsHint) timeSlotsHint.classList.remove("hidden");
+    }
+
+    // Folosit de email-handler.js după trimitere
+    window.bookingPicker = {
+      reset: resetPicker,
+      refresh: function () {
+        busyByDate = {};
+        return loadAvailability();
+      }
+    };
+
+    renderCalendar();
+    renderTimeSlots();
+    loadAvailability();
   }
 });
 

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="css/styles.css" />
     <!-- Add EmailJS library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="js/booking-api.js"></script>
     <script src="js/email-handler.js"></script>
   </head>
   <body class="bg-white font-['Poppins']">
@@ -207,6 +208,12 @@
                 </label>
                 <textarea id="message" rows="4" placeholder="Detalii suplimentare, preferințe, întrebări..." class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary resize-none"></textarea>
               </div>
+              <!-- Honeypot anti-spam: invizibil pentru oameni, completat de boți -->
+              <div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
+                <label for="website">Nu completa acest câmp</label>
+                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+              </div>
+              <div id="booking-captcha" class="mb-4 flex justify-center"></div>
               <input type="hidden" id="date" name="date" required />
               <input type="hidden" id="time" name="time" required />
               <button type="submit" id="submit-booking" class="w-full bg-primary text-white py-3 !rounded-button hover:bg-primary/90 transition-colors whitespace-nowrap cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center">
