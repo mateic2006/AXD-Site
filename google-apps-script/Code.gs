@@ -1,12 +1,11 @@
 // Backend pentru programările de pe site (Google Apps Script Web App).
 // GET  ?from=YYYY-MM-DD&to=YYYY-MM-DD  -> { ok, busy: { "YYYY-MM-DD": ["17:00", ...] } }
 // POST { name, email, phone, service, date: "YYYY-MM-DD", time: "HH:00", message }
-//      -> creează eveniment în Google Calendar + notificare push (Telegram)
+//      -> creează eveniment în Google Calendar + notificare push (ntfy)
 //
 // Script Properties (Project Settings -> Script Properties):
 //   CALENDAR_ID  (opțional) - id-ul calendarului; implicit calendarul principal
-//   TELEGRAM_BOT_TOKEN (opțional) - tokenul botului, de la @BotFather
-//   TELEGRAM_CHAT_ID   (opțional) - chat-ul care primește notificările (vezi telegramChatId)
+//   NTFY_TOPIC   (opțional) - topicul ntfy la care e abonată aplicația de pe iPhone
 //   TURNSTILE_SECRET (opțional) - cheia secretă Cloudflare Turnstile; dacă e setată, CAPTCHA e obligatoriu
 
 const FIRST_HOUR = 9;
@@ -173,31 +172,25 @@ function busySlots_(start, end) {
 }
 
 function notify_(booking) {
+  const topic = PropertiesService.getScriptProperties().getProperty("NTFY_TOPIC");
+  if (!topic) return;
   try {
-    sendTelegram_([
-      "📅 Programare nouă: " + booking.service,
-      "👤 " + booking.name,
-      "🕐 " + booking.date + ", ora " + booking.time,
-      "📞 " + booking.phone,
-      "✉️ " + booking.email,
-      booking.message ? "💬 " + booking.message : ""
-    ].filter(String).join("\n"));
+    UrlFetchApp.fetch("https://ntfy.sh/", {
+      method: "post",
+      contentType: "application/json",
+      muteHttpExceptions: true,
+      payload: JSON.stringify({
+        topic: topic,
+        title: "Programare nouă: " + booking.service,
+        message: booking.name + "\n" + booking.date + ", ora " + booking.time + "\nTel: " + booking.phone,
+        tags: ["calendar"],
+        priority: 4,
+        click: "tel:" + booking.phone.replace(/[^\d+]/g, "")
+      })
+    });
   } catch (err) {
-    console.error("Notificarea Telegram a eșuat: " + err);
+    console.error("Notificarea ntfy a eșuat: " + err);
   }
-}
-
-function sendTelegram_(text) {
-  const props = PropertiesService.getScriptProperties();
-  const token = props.getProperty("TELEGRAM_BOT_TOKEN");
-  const chatId = props.getProperty("TELEGRAM_CHAT_ID");
-  if (!token || !chatId) return null;
-  return UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/sendMessage", {
-    method: "post",
-    contentType: "application/json",
-    muteHttpExceptions: true,
-    payload: JSON.stringify({ chat_id: chatId, text: text })
-  });
 }
 
 function verifyTurnstile_(token) {
@@ -258,33 +251,18 @@ function json_(obj) {
 function authorize() {
   console.log("Calendar: " + getCalendar_().getName());
   // nu se execută niciodată; doar face ca editorul să ceară și permisiunea UrlFetch
-  if (false) UrlFetchApp.fetch("https://api.telegram.org/");
+  if (false) UrlFetchApp.fetch("https://ntfy.sh/");
 }
 
-// Rulează manual din editor, DUPĂ ce i-ai scris botului un mesaj în Telegram:
-// afișează în log chat id-ul de pus în TELEGRAM_CHAT_ID.
-function telegramChatId() {
-  const token = PropertiesService.getScriptProperties().getProperty("TELEGRAM_BOT_TOKEN");
-  if (!token) throw new Error("Lipsește TELEGRAM_BOT_TOKEN din Script Properties.");
-  const res = UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/getUpdates", { muteHttpExceptions: true });
-  const data = JSON.parse(res.getContentText());
-  if (!data.ok) throw new Error("Telegram: " + data.description);
-  const chats = {};
-  data.result.forEach(function (u) {
-    const msg = u.message || u.edited_message;
-    if (msg) chats[msg.chat.id] = msg.chat.first_name || msg.chat.title || "";
-  });
-  if (!Object.keys(chats).length) {
-    console.log("Niciun mesaj găsit. Deschide botul în Telegram, apasă Start / scrie-i ceva, apoi rulează din nou.");
-  }
-  Object.keys(chats).forEach(function (id) {
-    console.log("TELEGRAM_CHAT_ID = " + id + "  (" + chats[id] + ")");
-  });
-}
-
-// Rulează manual din editor: trimite o notificare de test pe telefon.
+// Rulează manual din editor: trimite o notificare de test pe iPhone.
 function testNotification() {
-  const res = sendTelegram_("✅ Test AXD: notificările funcționează");
-  if (!res) throw new Error("Lipsește TELEGRAM_BOT_TOKEN sau TELEGRAM_CHAT_ID din Script Properties.");
-  console.log("Telegram: " + res.getResponseCode() + " " + res.getContentText());
+  const topic = PropertiesService.getScriptProperties().getProperty("NTFY_TOPIC");
+  if (!topic) throw new Error("Lipsește NTFY_TOPIC din Script Properties.");
+  const res = UrlFetchApp.fetch("https://ntfy.sh/", {
+    method: "post",
+    contentType: "application/json",
+    muteHttpExceptions: true,
+    payload: JSON.stringify({ topic: topic, title: "Test AXD", message: "Notificările funcționează ✅" })
+  });
+  console.log("ntfy: " + res.getResponseCode() + " " + res.getContentText());
 }
