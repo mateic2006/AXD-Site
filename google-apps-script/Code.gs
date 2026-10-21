@@ -1,11 +1,12 @@
 // Backend pentru programările de pe site (Google Apps Script Web App).
 // GET  ?from=YYYY-MM-DD&to=YYYY-MM-DD  -> { ok, busy: { "YYYY-MM-DD": ["17:00", ...] } }
 // POST { name, email, phone, service, date: "YYYY-MM-DD", time: "HH:00", message }
-//      -> creează eveniment în Google Calendar + notificare push (ntfy)
+//      -> creează eveniment în Google Calendar + notificare push (ntfy, prin Cloudflare Worker)
 //
 // Script Properties (Project Settings -> Script Properties):
 //   CALENDAR_ID  (opțional) - id-ul calendarului; implicit calendarul principal
-//   NTFY_TOPIC   (opțional) - topicul ntfy la care e abonată aplicația de pe iPhone
+//   NOTIFY_RELAY_URL (opțional) - URL-ul Worker-ului din cloudflare-worker/notify-relay.js
+//   NOTIFY_RELAY_KEY (opțional) - aceeași parolă ca secretul RELAY_KEY din Worker
 //   TURNSTILE_SECRET (opțional) - cheia secretă Cloudflare Turnstile; dacă e setată, CAPTCHA e obligatoriu
 
 const FIRST_HOUR = 9;
@@ -172,25 +173,36 @@ function busySlots_(start, end) {
 }
 
 function notify_(booking) {
-  const topic = PropertiesService.getScriptProperties().getProperty("NTFY_TOPIC");
-  if (!topic) return;
   try {
-    UrlFetchApp.fetch("https://ntfy.sh/", {
-      method: "post",
-      contentType: "application/json",
-      muteHttpExceptions: true,
-      payload: JSON.stringify({
-        topic: topic,
-        title: "Programare nouă: " + booking.service,
-        message: booking.name + "\n" + booking.date + ", ora " + booking.time + "\nTel: " + booking.phone,
-        tags: ["calendar"],
-        priority: 4,
-        click: "tel:" + booking.phone.replace(/[^\d+]/g, "")
-      })
+    const res = sendNotification_({
+      title: "Programare nouă: " + booking.service,
+      message: booking.name + "\n" + booking.date + ", ora " + booking.time + "\nTel: " + booking.phone +
+        (booking.message ? "\n" + booking.message : ""),
+      tags: ["calendar"],
+      priority: 4,
+      click: "tel:" + booking.phone.replace(/[^\d+]/g, "")
     });
+    if (res && res.getResponseCode() !== 204) {
+      console.error("Releul de notificări a răspuns " + res.getResponseCode());
+    }
   } catch (err) {
-    console.error("Notificarea ntfy a eșuat: " + err);
+    console.error("Notificarea a eșuat: " + err);
   }
+}
+
+// Trimite prin Cloudflare Worker (serverele Google nu pot accesa ntfy.sh direct)
+function sendNotification_(notification) {
+  const props = PropertiesService.getScriptProperties();
+  const url = props.getProperty("NOTIFY_RELAY_URL");
+  const key = props.getProperty("NOTIFY_RELAY_KEY");
+  if (!url || !key) return null;
+  return UrlFetchApp.fetch(url, {
+    method: "post",
+    contentType: "application/json",
+    headers: { Authorization: "Bearer " + key },
+    muteHttpExceptions: true,
+    payload: JSON.stringify(notification)
+  });
 }
 
 function verifyTurnstile_(token) {
@@ -251,18 +263,13 @@ function json_(obj) {
 function authorize() {
   console.log("Calendar: " + getCalendar_().getName());
   // nu se execută niciodată; doar face ca editorul să ceară și permisiunea UrlFetch
-  if (false) UrlFetchApp.fetch("https://ntfy.sh/");
+  if (false) UrlFetchApp.fetch("https://example.com/");
 }
 
-// Rulează manual din editor: trimite o notificare de test pe iPhone.
+// Rulează manual din editor: trimite o notificare de test pe iPhone prin Worker.
+// 204 = a mers; 401 = parola nu se potrivește cu RELAY_KEY; 500 = secretele lipsesc din Worker.
 function testNotification() {
-  const topic = PropertiesService.getScriptProperties().getProperty("NTFY_TOPIC");
-  if (!topic) throw new Error("Lipsește NTFY_TOPIC din Script Properties.");
-  const res = UrlFetchApp.fetch("https://ntfy.sh/", {
-    method: "post",
-    contentType: "application/json",
-    muteHttpExceptions: true,
-    payload: JSON.stringify({ topic: topic, title: "Test AXD", message: "Notificările funcționează ✅" })
-  });
-  console.log("ntfy: " + res.getResponseCode() + " " + res.getContentText());
+  const res = sendNotification_({ title: "Test AXD", message: "Notificările funcționează ✅" });
+  if (!res) throw new Error("Lipsește NOTIFY_RELAY_URL sau NOTIFY_RELAY_KEY din Script Properties.");
+  console.log("Releu: " + res.getResponseCode() + " " + res.getContentText());
 }
