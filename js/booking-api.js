@@ -5,7 +5,7 @@ const BOOKING_API_URL = "https://script.google.com/macros/s/AKfycbzPp7eb8zpRr4aP
 const TURNSTILE_SITE_KEY = "0x4AAAAAAFd3PILitw_vY-Rj";
 // Topicul ntfy la care e abonată aplicația ntfy de pe telefonul Andreei.
 // Notificarea pleacă din browser, pentru că serverele Google nu pot accesa ntfy.sh.
-const NTFY_TOPIC = "";
+const NTFY_TOPIC = "axd-programari-7k2m9q4x8z";
 
 const pageLoadedAt = Date.now();
 let turnstileWidgetId = null;
