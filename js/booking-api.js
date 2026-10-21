@@ -3,6 +3,9 @@
 const BOOKING_API_URL = "https://script.google.com/macros/s/AKfycbzPp7eb8zpRr4aPeWO4xeFTU-GpdsA6K0b3XD6jg3IJswZGBYvNAk5UYqlVpqcD2b8i/exec";
 // Cheia publică (site key) Cloudflare Turnstile. Dacă e goală, CAPTCHA nu apare.
 const TURNSTILE_SITE_KEY = "0x4AAAAAAFd3PILitw_vY-Rj";
+// Topicul ntfy la care e abonată aplicația ntfy de pe telefonul Andreei.
+// Notificarea pleacă din browser, pentru că serverele Google nu pot accesa ntfy.sh.
+const NTFY_TOPIC = "";
 
 const pageLoadedAt = Date.now();
 let turnstileWidgetId = null;
@@ -41,6 +44,21 @@ const BookingApi = {
       .then(r => r.json())
       .then(d => (d && d.ok ? d.busy : {}))
       .catch(() => ({}));
+  },
+  notifyOwner: function (b) {
+    if (!NTFY_TOPIC) return;
+    // fire-and-forget: programarea e deja salvată, o notificare eșuată nu contează pentru client
+    fetch("https://ntfy.sh/", {
+      method: "POST",
+      body: JSON.stringify({
+        topic: NTFY_TOPIC,
+        title: "Programare nouă: " + b.service,
+        message: `${b.name}\n${b.date}, ora ${b.time}\nTel: ${b.phone}` + (b.message ? `\n${b.message}` : ""),
+        tags: ["calendar"],
+        priority: 4,
+        click: "tel:" + b.phone.replace(/[^\d+]/g, "")
+      })
+    }).catch(() => {});
   },
   book: function (payload) {
     // text/plain evită preflight-ul CORS, pe care Apps Script nu îl suportă

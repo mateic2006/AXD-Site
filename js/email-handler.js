@@ -83,6 +83,7 @@ function handleEmailSubmission(event) {
         if (!res || !res.ok) {
           throw { text: (res && res.error) || "Te rugăm să încerci din nou.", slotTaken: res && res.code === "slot_taken" };
         }
+        BookingApi.notifyOwner({ name: name, phone: phone, service: service, date: date, time: time, message: message });
       })
     : Promise.resolve();
 
