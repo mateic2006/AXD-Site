@@ -4,6 +4,8 @@
 // Secrete (Worker -> Settings -> Variables and Secrets, tip "Secret"):
 //   RELAY_KEY  - parolă lungă, aceeași ca NOTIFY_RELAY_KEY din Script Properties (Apps Script)
 //   NTFY_TOPIC - topicul ntfy la care e abonat telefonul
+//   NTFY_TOKEN - token de acces ntfy.sh (tk_...). Fără el, limita zilnică e pe IP-ul comun
+//                al Cloudflare și se epuizează din cauza altor utilizatori (eroare 429).
 
 const ALLOWED_FIELDS = ["title", "message", "tags", "priority", "click"];
 
@@ -31,12 +33,18 @@ export default {
       if (body[field] !== undefined) payload[field] = body[field];
     }
 
+    const headers = { "Content-Type": "application/json" };
+    if (env.NTFY_TOKEN) headers.Authorization = `Bearer ${env.NTFY_TOKEN}`;
+
     const res = await fetch("https://ntfy.sh/", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(payload)
     });
-    return new Response(null, { status: res.ok ? 204 : 502 });
+    if (res.ok) return new Response(null, { status: 204 });
+    // codul și mesajul de eroare ntfy, pentru diagnostic (nu conțin topicul)
+    const detail = await res.text().catch(() => "");
+    return new Response(`ntfy ${res.status}: ${detail.slice(0, 300)}`, { status: 502 });
   }
 };
 
